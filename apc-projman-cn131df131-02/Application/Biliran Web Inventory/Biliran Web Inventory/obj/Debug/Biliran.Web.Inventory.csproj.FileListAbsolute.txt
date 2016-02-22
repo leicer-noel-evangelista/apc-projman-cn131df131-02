@@ -1,0 +1,4 @@
+c:\users\carlos nicolas\documents\visual studio 2010\Projects\Biliran Web Inventory\Biliran Web Inventory\bin\Biliran Web Inventory.dll
+c:\users\carlos nicolas\documents\visual studio 2010\Projects\Biliran Web Inventory\Biliran Web Inventory\bin\Biliran Web Inventory.pdb
+c:\users\carlos nicolas\documents\visual studio 2010\Projects\Biliran Web Inventory\Biliran Web Inventory\obj\Debug\Biliran Web Inventory.dll
+c:\users\carlos nicolas\documents\visual studio 2010\Projects\Biliran Web Inventory\Biliran Web Inventory\obj\Debug\Biliran Web Inventory.pdb
