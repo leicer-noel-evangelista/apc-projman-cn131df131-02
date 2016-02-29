@@ -20,7 +20,16 @@
 					<li><a href="inventory_add.php">Add Item</a></li>
 				</ul>
 			</li>
-			<li><a href="transactions.php">Transactions</a></li>
+				<li><a href="transactions.php">Transactions</a></li>
+			<ul>
+				<li><a href="view_transactions.php">View Transactions</a></li>
+				<li><a href="add_transactions.php">Add Transactions</a></li>
+			</ul>
+			<li><a href="item_inventory.php">Item Inventory</a></li>
+			<ul>
+				<li><a href="view_forward_supplies.php">View Forward Supplies</a></li>
+				<li><a href="forward_supplies.php">Forward Supplies</a></li>
+			</ul>
 			<li>
 				<a href="supplier.php">Suppliers</a><br>
 				<ul>

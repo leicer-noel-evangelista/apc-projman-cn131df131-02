@@ -64,7 +64,7 @@ class BPHIMS {
 	/**
 		Add item to the inventory
 	*/
-	public static function addItemToInventory($data) {
+	public static function addsupplies($data) {
 		// Open DB
 		$db = Helper::openDB();
 		
@@ -75,25 +75,25 @@ class BPHIMS {
 		$quantity = mysql_real_escape_string($data['quantity']);
 		$unit = mysql_real_escape_string($data['unit']);
 		
-		$sql = "
+		$sql = '
 			INSERT
 			INTO
 				`items` (`code`, `name`, `description`, `quantity`, `unit`)
 			VALUES
 				(
-					'".$code."',
-					'".$name."',
-					'".$description."',
-					'".$quantity.",
-					'".$unit."'
+					"'.$code.'",
+					"'.$name.'",
+					"'.$description.'",
+					"'.$quantity.'",
+					"'.$unit.'"
 				)
-		";
+		';
 		
 		// Query Database
 		$insert = mysql_query($sql,$db);
 		$return = array(
 			"status" => ($insert)?SYS_SUCCESS:SYS_ERROR,
-			"message" => ($insert)?"Item successfully added!":"Failed to insert item!",
+			"message" => ($insert)?"Supplies successfully added!":"Failed to insert supplier!",
 			"item_id" => mysql_insert_id()
 		);
 
@@ -102,6 +102,7 @@ class BPHIMS {
 		
 		return $return;
 	}
+	
 	
 	/**
 		Get item via ID
@@ -200,7 +201,7 @@ class BPHIMS {
 	/**
 		Add Supplier
 	*/
-	public static function addSupplier($data) {
+	public static function adddSupplier($data) {
 		// Open DB
 		$db = Helper::openDB();
 		

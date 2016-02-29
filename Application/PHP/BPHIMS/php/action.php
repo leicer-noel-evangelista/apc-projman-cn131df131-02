@@ -14,7 +14,7 @@ if(isset($_REQUEST['action']) && !empty($_REQUEST['action'])) {
 	}
 	
 	if($_REQUEST['action'] === "inventory_add") {
-		$status = BPHIMS::addItemToInventory($_REQUEST);
+		$status = BPHIMS::addsupplies($_REQUEST);
 		if($status['status'] == SYS_SUCCESS) {
 			Helper::createMessage(SYS_SUCCESS,$status['message']);
 			Helper::redirect("../inventory_edit.php?item_id=".$status['item_id']);
@@ -23,7 +23,6 @@ if(isset($_REQUEST['action']) && !empty($_REQUEST['action'])) {
 			Helper::redirect("../inventory_add.php");
 		}
 	}
-	
 	if($_REQUEST['action'] === "inventory_update") {
 		$status = BPHIMS::updateItemInventory($_REQUEST);
 		Helper::createMessage($status['status'],$status['message']);
