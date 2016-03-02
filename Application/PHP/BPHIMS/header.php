@@ -28,7 +28,6 @@
 			<li><a href="item_inventory.php">Item Inventory</a></li>
 			<ul>
 				<li><a href="view_forward_supplies.php">View Forward Supplies</a></li>
-				<li><a href="forward_supplies.php">Forward Supplies</a></li>
 			</ul>
 			<li>
 				<a href="supplier.php">Suppliers</a><br>

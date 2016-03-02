@@ -19,6 +19,8 @@ define("DB_USERS_TYPE_ADMIN",1);
 define("DB_USERS_TYPE_USER",2);
 
 /* Database Table:item Variables */
-define("DB_ITEMS_UNIT","pcs|pack|box|pad");
+define("DB_ITEMS_UNIT","pcs|pack|box|pcs per bottle");
+define("DB_ITEMS_FOR","Adult|Kids");
+define("DB_ITEMS_LOCATION","Stockroom A|Stockroom B|Stockroom C");
 
 ?>

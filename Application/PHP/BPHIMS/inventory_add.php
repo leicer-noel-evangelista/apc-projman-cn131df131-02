@@ -15,13 +15,56 @@
 		<td><span>Name:</span></td>
 		<td><input type="text" name="name" required /></td>
 	</tr>
+
+<tr>
+		<td><span>For:</span></td>
+		<td>
+			<select name="fore" >
+			<?php
+				foreach(Helper::toArray(DB_ITEMS_FOR) as $fore) {
+			?>
+				<option value= ""></option>
+				<option value="<?php echo $fore; ?>"><?php echo $fore; ?></option>
+			<?php
+				}
+			?>
+			</select>
+		</td>
+	</tr>
+
+<tr>
+		<td><span>Dosage:</span></td>
+		<td><input type="text" name="dosage" /></td>
+	</tr>
+
 	<tr>
 		<td><span>Description:</span></td>
 		<td><textarea name="description"></textarea></td>
 	</tr>
+
+<tr>
+		<td><span>Supplies Location:</span></td>
+		<td>
+			<select name="location" required>
+			<?php
+				foreach(Helper::toArray(DB_ITEMS_LOCATION) as $location) {
+			?>
+				<option value= ""></option>
+				<option value="<?php echo $location; ?>"><?php echo $location; ?></option>
+			<?php
+				}
+			?>
+			</select>
+		</td>
+	</tr>
+
+	<tr>
+		<td><span>Supplier:</span></td>
+		<td><input type="text" name="supplier" required /></td>
+	</tr>
 	<tr>
 		<td><span>Quantity:</span></td>
-		<td><input type="text" name="quantity" required /></td>
+		<td><input type="number" name="quantity" required /></td>
 	</tr>
 	<tr>
 		<td><span>Unit:</span></td>
@@ -37,6 +80,9 @@
 			</select>
 		</td>
 	</tr>
+
+
+
 	<tr>
 		<td><span></span></td>
 		<td><input type="submit" value="Add" /></td>

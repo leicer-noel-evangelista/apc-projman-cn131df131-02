@@ -71,21 +71,31 @@ class BPHIMS {
 		// Create Query
 		$code = mysql_real_escape_string($data['code']);
 		$name = mysql_real_escape_string($data['name']);
+		$fore = mysql_real_escape_string($data['fore']);
+		$dosage = mysql_real_escape_string($data['dosage']);
 		$description = mysql_real_escape_string($data['description']);
+		$location = mysql_real_escape_string($data['location']);
+		$supplier = mysql_real_escape_string($data['supplier']);
 		$quantity = mysql_real_escape_string($data['quantity']);
 		$unit = mysql_real_escape_string($data['unit']);
+		
 		
 		$sql = '
 			INSERT
 			INTO
-				`items` (`code`, `name`, `description`, `quantity`, `unit`)
+				`items` (`code`, `name`, `fore`, `dosage`, `description`, `location`, `supplier`, `quantity`, `unit`)
 			VALUES
 				(
 					"'.$code.'",
 					"'.$name.'",
+					"'.$fore.'",
+					"'.$dosage.'",
 					"'.$description.'",
+					"'.$location.'",
+					"'.$supplier.'",
 					"'.$quantity.'",
 					"'.$unit.'"
+					
 				)
 		';
 		
@@ -142,9 +152,14 @@ class BPHIMS {
 		$item_id = mysql_real_escape_string($data['item_id']);
 		$code = mysql_real_escape_string($data['code']);
 		$name = mysql_real_escape_string($data['name']);
+		$fore = mysql_real_escape_string($data['fore']);
+		$dosage = mysql_real_escape_string($data['dosage']);
 		$description = mysql_real_escape_string($data['description']);
+		$location = mysql_real_escape_string($data['location']);
+		$supplier = mysql_real_escape_string($data['supplier']);
 		$quantity = mysql_real_escape_string($data['quantity']);
 		$unit = mysql_real_escape_string($data['unit']);
+		
 		
 		$sql = "
 			UPDATE
@@ -152,9 +167,14 @@ class BPHIMS {
 			SET
 				`code`='".$code."',
 				`name`='".$name."',
+				`fore`='".$fore."',
+				`dosage`='".$dosage."',
 				`description`='".$description."',
+				`location`='".$location."',
+				`supplier`='".$supplier."',
 				`quantity`='".$quantity."',
 				`unit`='".$unit."'
+				
 			WHERE
 				`item_id`='".$item_id."'
 			";
@@ -201,7 +221,7 @@ class BPHIMS {
 	/**
 		Add Supplier
 	*/
-	public static function adddSupplier($data) {
+	public static function addSupplier($data) {
 		// Open DB
 		$db = Helper::openDB();
 		

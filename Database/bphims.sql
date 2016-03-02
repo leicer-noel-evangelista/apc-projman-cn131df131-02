@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 29, 2016 at 05:19 PM
+-- Generation Time: Mar 02, 2016 at 07:01 AM
 -- Server version: 5.6.14
 -- PHP Version: 5.5.6
 
@@ -30,23 +30,25 @@ CREATE TABLE IF NOT EXISTS `items` (
   `item_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `code` varchar(255) NOT NULL,
+  `fore` varchar(255) NOT NULL,
+  `dosage` varchar(255) NOT NULL,
   `description` text NOT NULL,
+  `location` varchar(255) NOT NULL,
+  `supplier` varchar(255) NOT NULL,
   `quantity` int(11) NOT NULL,
   `unit` varchar(255) NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`item_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
 
 --
 -- Dumping data for table `items`
 --
 
-INSERT INTO `items` (`item_id`, `name`, `code`, `description`, `quantity`, `unit`, `created`, `updated`) VALUES
-(1, 'Biogesic', 'I00001', 'Something', 500, 'pcs', '2016-02-28 08:44:52', '2016-02-29 15:52:26'),
-(2, 'Tuseran', 'I00002', 'Tuseran Forte', 300, 'pcs', '2016-02-28 08:44:52', '0000-00-00 00:00:00'),
-(3, 'Dolculax', 'I00003', 'Dolculax', 60, 'box', '2016-02-28 09:09:40', '2016-02-29 05:56:05'),
-(4, 'Tetramicin X', 'I0007', 'Tetramicin X', 302, 'pcs', '2016-02-28 09:13:26', '2016-02-28 10:16:23');
+INSERT INTO `items` (`item_id`, `name`, `code`, `fore`, `dosage`, `description`, `location`, `supplier`, `quantity`, `unit`, `created`, `updated`) VALUES
+(1, 'Tempra Forte', 'TF1', 'Kids', '60 MG', 'Syrup, 140 ML', 'Stockroom A', 'Tempra Philippines', 200, 'pcs per bottle', '2016-02-28 08:44:52', '2016-03-02 05:51:10'),
+(2, 'Tempra Forte', 'TF2', 'Adult', '5 ML', 'Syrup, 60 ML', 'Stockroom B', 'Tempra Philippines', 300, 'pcs per bottle', '2016-02-28 08:44:52', '2016-03-02 05:51:27');
 
 -- --------------------------------------------------------
 
@@ -64,17 +66,14 @@ CREATE TABLE IF NOT EXISTS `suppliers` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`supplier_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
 
 --
 -- Dumping data for table `suppliers`
 --
 
 INSERT INTO `suppliers` (`supplier_id`, `code`, `name`, `address`, `contact1`, `contact2`, `created`, `updated`) VALUES
-(1, 'S00032', 'Mercury Drugs', 'Taguig', '3', '', '2016-02-28 09:37:52', '2016-02-28 10:24:38'),
-(2, 'S00037', 'South Star Drug Store', 'Quezon', '', '', '2016-02-28 10:04:06', '2016-02-28 10:24:48'),
-(3, 'G1000', 'Medical Supplies Philippines', 'Quezon City', '', '', '2016-02-29 05:50:58', '2016-02-29 05:50:58'),
-(4, 'GU800', 'Hands', 'Palawan', '', '', '2016-02-29 05:51:54', '2016-02-29 05:51:54');
+(16, 'TF2016-000001', 'Tempra Philippines', 'Tondo, Manila', '787-13-20', '741-28-94', '2016-03-02 05:59:12', '2016-03-02 06:00:21');
 
 -- --------------------------------------------------------
 
