@@ -28,6 +28,23 @@ if(isset($_REQUEST['action']) && !empty($_REQUEST['action'])) {
 		Helper::createMessage($status['status'],$status['message']);
 		Helper::redirect("../inventory_edit.php?item_id=".$status['item_id']);
 	}
+
+
+	if($_REQUEST['action'] === "inventory_equipment_add") {
+		$status = BPHIMS::addequipment($_REQUEST);
+		if($status['status'] == SYS_SUCCESS) {
+			Helper::createMessage(SYS_SUCCESS,$status['message']);
+			Helper::redirect("../inventory_edit_equipments.php?equipment_id=".$status['equipment_id']);
+		} else {
+			Helper::createMessage(SYS_ERROR,$status['message']);
+			Helper::redirect("../inventory_add_equipments.php");
+		}
+	}
+	if($_REQUEST['action'] === "inventory_equipment_update") {
+		$status = BPHIMS::updateequipmentInventory($_REQUEST);
+		Helper::createMessage($status['status'],$status['message']);
+		Helper::redirect("../inventory_edit_equipments.php?equipment_id=".$status['equipment_id']);
+	}
 	
 	if($_REQUEST['action'] === "supplier_add") {
 		$status = BPHIMS::addSupplier($_REQUEST);

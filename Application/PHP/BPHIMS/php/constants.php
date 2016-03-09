@@ -22,5 +22,6 @@ define("DB_USERS_TYPE_USER",2);
 define("DB_ITEMS_UNIT","pcs|pack|box|pcs per bottle");
 define("DB_ITEMS_FOR","Adult|Kids");
 define("DB_ITEMS_LOCATION","Stockroom A|Stockroom B|Stockroom C");
+define("DB_ITEMS_DOSAGE_UNIT","MG|ML");
 
 ?>

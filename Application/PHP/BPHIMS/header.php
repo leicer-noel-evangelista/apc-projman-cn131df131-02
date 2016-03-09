@@ -15,24 +15,23 @@
 		<ul>
 			<li>
 				<a href="inventory.php">Inventory</a><br>
+				<a href="supplies.php">Supplies</a><br>
+				<a href="equipments.php">Equipments</a><br>
 				<ul>
-					<li><a href="inventory.php">View Inventory</a></li>
-					<li><a href="inventory_add.php">Add Item</a></li>
+					<li><a href="inventory_add.php">Add Supplies</a></li>
+					<li><a href="inventory_add_equipments.php">Add Equipments</a></li>
 				</ul>
 			</li>
 				<li><a href="transactions.php">Transactions</a></li>
 			<ul>
-				<li><a href="view_transactions.php">View Transactions</a></li>
 				<li><a href="add_transactions.php">Add Transactions</a></li>
 			</ul>
-			<li><a href="item_inventory.php">Item Inventory</a></li>
+			<li><a href="item_inventory.php">Dispense Inventory</a></li>
 			<ul>
-				<li><a href="view_forward_supplies.php">View Forward Supplies</a></li>
 			</ul>
 			<li>
 				<a href="supplier.php">Suppliers</a><br>
 				<ul>
-					<li><a href="supplier.php">View Suppliers</a></li>
 					<li><a href="supplier_add.php">Add Suppliers</a></li>
 				</ul>
 			</li>

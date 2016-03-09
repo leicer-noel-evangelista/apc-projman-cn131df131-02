@@ -61,6 +61,8 @@ class BPHIMS {
 		return $lists;
 	}
 	
+
+	
 	/**
 		Add item to the inventory
 	*/
@@ -70,6 +72,8 @@ class BPHIMS {
 		
 		// Create Query
 		$code = mysql_real_escape_string($data['code']);
+		$batch_code = mysql_real_escape_string($data['batch_code']);
+		$expiry = mysql_real_escape_string($data['expiry']);
 		$name = mysql_real_escape_string($data['name']);
 		$fore = mysql_real_escape_string($data['fore']);
 		$dosage = mysql_real_escape_string($data['dosage']);
@@ -83,13 +87,16 @@ class BPHIMS {
 		$sql = '
 			INSERT
 			INTO
-				`items` (`code`, `name`, `fore`, `dosage`, `description`, `location`, `supplier`, `quantity`, `unit`)
+				`items` (`code`, `batch_code`, `expiry`, `name`, `fore`, `dosage`, `dosage_unit`, `description`, `location`, `supplier`, `quantity`, `unit`)
 			VALUES
 				(
 					"'.$code.'",
+					"'.$batch_code.'",
+					"'.$expiry.'",
 					"'.$name.'",
 					"'.$fore.'",
 					"'.$dosage.'",
+					"'.$dosage_unit.'",
 					"'.$description.'",
 					"'.$location.'",
 					"'.$supplier.'",
@@ -151,9 +158,12 @@ class BPHIMS {
 		// Create Query
 		$item_id = mysql_real_escape_string($data['item_id']);
 		$code = mysql_real_escape_string($data['code']);
+		$batch_code = mysql_real_escape_string($data['batch_code']);
+		$expiry = mysql_real_escape_string($data['expiry']);
 		$name = mysql_real_escape_string($data['name']);
 		$fore = mysql_real_escape_string($data['fore']);
 		$dosage = mysql_real_escape_string($data['dosage']);
+		$dosage_unit = mysql_real_escape_string($data['dosage_unit']);
 		$description = mysql_real_escape_string($data['description']);
 		$location = mysql_real_escape_string($data['location']);
 		$supplier = mysql_real_escape_string($data['supplier']);
@@ -166,9 +176,12 @@ class BPHIMS {
 				`items`
 			SET
 				`code`='".$code."',
+				`batch_code`='".$batch_code."',
+				`expiry`='".$expiry."',
 				`name`='".$name."',
 				`fore`='".$fore."',
 				`dosage`='".$dosage."',
+				`dosage_unit`='".$dosage_unit."',
 				`description`='".$description."',
 				`location`='".$location."',
 				`supplier`='".$supplier."',
@@ -332,6 +345,162 @@ class BPHIMS {
 		return $return;
 	}
 	
+
+	/**
+		Get Equipment item list
+	*/
+public static function getEquipmentList() {
+		// Open DB
+		$db = Helper::openDB();
+		
+		// Create Query
+		$sql = "SELECT * FROM `equipments`";
+		
+		// Query Database
+		$getList = mysql_query($sql,$db);
+		
+		// Fetch Details
+		$lists = Helper::getListFromResultQuery($getList);
+		
+		// Close DB
+		Helper::closeDB($db);
+		
+		// Retunrn lists
+		return $lists;
+	}
+	
+	/**
+		Add equipments to the inventory
+	*/
+	public static function addequipment($data) {
+		// Open DB
+		$db = Helper::openDB();
+		
+		// Create Query
+		$code = mysql_real_escape_string($data['code']);
+		$name = mysql_real_escape_string($data['name']);
+		$description = mysql_real_escape_string($data['description']);
+		$brand = mysql_real_escape_string($data['brand']);
+		$supplier = mysql_real_escape_string($data['supplier']);
+		$quantity = mysql_real_escape_string($data['quantity']);
+		$unit = mysql_real_escape_string($data['unit']);
+		$location = mysql_real_escape_string($data['location']);
+		
+		
+		$sql = '
+			INSERT
+			INTO
+				`equipments` (`code`, `name`, `description`, `brand`, `supplier`, `quantity`, `unit`, `location`)
+			VALUES
+				(
+					"'.$code.'",
+					"'.$name.'",
+					"'.$description.'",
+					"'.$brand.'",
+					"'.$supplier.'",
+					"'.$quantity.'",
+					"'.$unit.'",
+					"'.$location.'"
+					
+				)
+		';
+		
+		// Query Database
+		$insert = mysql_query($sql,$db);
+		$return = array(
+			"status" => ($insert)?SYS_SUCCESS:SYS_ERROR,
+			"message" => ($insert)?"Supplies successfully added!":"Failed to insert supplier!",
+			"equipment_id" => mysql_insert_id()
+		);
+
+		// Close DB
+		Helper::closeDB($db);
+		
+		return $return;
+	}
+	
+	
+	/**
+		Get item via ID
+	*/
+	public static function getEquipmentInventoryItem($id) {
+		// Open DB
+		$db = Helper::openDB();
+		
+		// Create Query
+		$sql = "SELECT * FROM `equipments` WHERE `equipment_id`=".$id;
+		
+		// Query Database
+		$query = mysql_query($sql,$db);
+		
+		if($query) {
+			// Fetch Details
+			$result = Helper::getRowFromResultQuery($query);
+		} else {
+			$result = $query;
+		}
+		
+		// Close DB
+		Helper::closeDB($db);
+		
+		// Retunrn lists
+		return $result;
+	}
+	
+	/**
+		Update equipments inventory item
+	*/
+	public static function updateequipmentInventory($data) {
+		// Open DB
+		$db = Helper::openDB();
+		
+		// Create Query
+		$equipment_id = mysql_real_escape_string($data['equipment_id']);
+		$code = mysql_real_escape_string($data['code']);
+		$name = mysql_real_escape_string($data['name']);
+		$description = mysql_real_escape_string($data['description']);
+		$brand = mysql_real_escape_string($data['brand']);
+		$supplier = mysql_real_escape_string($data['supplier']);
+		$quantity = mysql_real_escape_string($data['quantity']);
+		$unit = mysql_real_escape_string($data['unit']);
+		$location = mysql_real_escape_string($data['location']);
+		
+		$sql = "
+			UPDATE
+				`equipments`
+			SET
+				`code`='".$code."',
+				`name`='".$name."',
+				`description`='".$description."',
+				`brand`='".$brand."',
+				`supplier`='".$supplier."',
+				`quantity`='".$quantity."',
+				`unit`='".$unit."',
+				`location`='".$location."'
+				
+			WHERE
+				`equipment_id`='".$equipment_id."'
+			";
+		
+		// Query Database
+		$update = mysql_query($sql,$db);
+		$return = array(
+			"status" => ($update)?SYS_SUCCESS:SYS_ERROR,
+			"message" => ($update)?"Item successfully updated!":"Failed to update item!",
+			"equipment_id" => $equipment_id
+		);
+		
+		// Close DB
+		Helper::closeDB($db);
+		
+		// Retunrn lists
+		return $return;
+	}
+	
+
+
 }
+
+
 
 ?>

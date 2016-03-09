@@ -11,13 +11,24 @@
 		<td><span>Code:</span></td>
 		<td><input type="text" name="code" required /></td>
 	</tr>
+
+<tr>
+		<td><span>Batch Code:</span></td>
+		<td><input type="text" name="batch_code" required /></td>
+	</tr>
+
+	<tr>
+		<td><span>Expiry:</span></td>
+		<td><input type="date" name="expiry" required /></td>
+	</tr>
+
 	<tr>
 		<td><span>Name:</span></td>
 		<td><input type="text" name="name" required /></td>
 	</tr>
 
 <tr>
-		<td><span>For:</span></td>
+		<td ><span>For:</span></td>
 		<td>
 			<select name="fore" >
 			<?php
@@ -31,11 +42,24 @@
 			</select>
 		</td>
 	</tr>
-
 <tr>
 		<td><span>Dosage:</span></td>
-		<td><input type="text" name="dosage" /></td>
-	</tr>
+		<td><input type="number" name="dosage" /></td>
+
+<td>
+			<select name="dosage_unit" >
+			<?php
+				foreach(Helper::toArray(DB_ITEMS_DOSAGE_UNIT) as $dosage_unit) {
+			?>
+				<option value= ""></option>
+				<option value="<?php echo $dosage_unit; ?>"><?php echo $dosage_unit; ?></option>
+			<?php
+				}
+			?>
+			</select>
+		</td>
+	
+</tr>
 
 	<tr>
 		<td><span>Description:</span></td>
@@ -49,7 +73,7 @@
 			<?php
 				foreach(Helper::toArray(DB_ITEMS_LOCATION) as $location) {
 			?>
-				<option value= ""></option>
+	
 				<option value="<?php echo $location; ?>"><?php echo $location; ?></option>
 			<?php
 				}
