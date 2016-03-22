@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 09, 2016 at 07:39 AM
+-- Generation Time: Mar 22, 2016 at 08:19 AM
 -- Server version: 5.6.14
 -- PHP Version: 5.5.6
 
@@ -17,8 +17,98 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `bphims`
+-- Database: `bphims4`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `category`
+--
+
+CREATE TABLE IF NOT EXISTS `category` (
+  `category_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  PRIMARY KEY (`category_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `category`
+--
+
+INSERT INTO `category` (`category_id`, `name`, `description`) VALUES
+(1, 'Supply', ''),
+(2, 'Equipment', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `delivery`
+--
+
+CREATE TABLE IF NOT EXISTS `delivery` (
+  `delivery_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `supplier_id` int(11) NOT NULL,
+  `received_by` int(11) NOT NULL,
+  `po_number` varchar(255) NOT NULL,
+  `pr_number` varchar(255) NOT NULL,
+  `dr_number` varchar(255) NOT NULL,
+  `si_number` varchar(255) NOT NULL,
+  `amount` double NOT NULL,
+  `is_consignment` tinyint(1) NOT NULL DEFAULT '0',
+  `remarks` text NOT NULL,
+  `received_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `image` varchar(255) NOT NULL,
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`delivery_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `delivery_equipment`
+--
+
+CREATE TABLE IF NOT EXISTS `delivery_equipment` (
+  `delivery_equipment_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `delivery_id` int(11) NOT NULL,
+  `item_id` int(11) NOT NULL,
+  `equipment_code` varchar(255) NOT NULL,
+  `brand` varchar(255) NOT NULL,
+  `warranty` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `location` varchar(255) NOT NULL,
+  `is_returned` tinyint(1) NOT NULL DEFAULT '0',
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`delivery_equipment_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `delivery_supply`
+--
+
+CREATE TABLE IF NOT EXISTS `delivery_supply` (
+  `delivery_supply_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `delivery_id` int(11) NOT NULL,
+  `item_id` int(11) NOT NULL,
+  `batch_code` varchar(255) NOT NULL,
+  `dispense` int(11) NOT NULL DEFAULT '0',
+  `quantity` int(11) NOT NULL,
+  `unit_id` int(11) NOT NULL,
+  `dosage` int(11) NOT NULL,
+  `dosage_unit_id` int(11) NOT NULL,
+  `age` varchar(255) NOT NULL,
+  `brand` varchar(255) NOT NULL,
+  `is_restricted` tinyint(1) NOT NULL DEFAULT '0',
+  `expiry` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `location` varchar(255) NOT NULL,
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`delivery_supply_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -27,140 +117,206 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `department` (
-  `department_id` int(10) NOT NULL AUTO_INCREMENT,
-  `department_name` varchar(255) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  PRIMARY KEY (`department_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `equipments`
---
-
-CREATE TABLE IF NOT EXISTS `equipments` (
-  `equipment_id` int(10) NOT NULL AUTO_INCREMENT,
+  `department_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `code` varchar(255) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `brand` varchar(255) NOT NULL,
-  `supplier` varchar(255) NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `unit` varchar(255) NOT NULL,
-  `location` varchar(255) NOT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`equipment_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=217 ;
-
---
--- Dumping data for table `equipments`
---
-
-INSERT INTO `equipments` (`equipment_id`, `name`, `code`, `description`, `brand`, `supplier`, `quantity`, `unit`, `location`, `created`, `updated`) VALUES
-(214, 'Wheel Chair', 'TF1000', '', 'asus', 'Asus Philippines', 10, 'box', 'Stockroom A', '2016-03-08 07:32:37', '2016-03-09 04:35:04'),
-(215, 'Surgery Knife', 'TF1001', '', 'Otap', 'SK Philippines', 250, 'pcs', 'Stockroom B', '2016-03-09 03:37:58', '2016-03-09 03:56:25'),
-(216, 'Thermometer', 'TF1002', '', 'Kineck', 'Thermo Philippines', 100, 'pcs', 'Stockroom A', '2016-03-09 03:42:40', '0000-00-00 00:00:00');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `items`
---
-
-CREATE TABLE IF NOT EXISTS `items` (
-  `item_id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `code` varchar(255) NOT NULL,
-  `fore` varchar(255) NOT NULL,
-  `dosage` varchar(255) NOT NULL,
-  `dosage_unit` varchar(255) NOT NULL,
   `description` text NOT NULL,
-  `location` varchar(255) NOT NULL,
-  `supplier` varchar(255) NOT NULL,
-  `unit` varchar(255) NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-  `batch_code` varchar(255) NOT NULL,
-  `expiry` date NOT NULL,
-  PRIMARY KEY (`item_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=24 ;
-
---
--- Dumping data for table `items`
---
-
-INSERT INTO `items` (`item_id`, `name`, `code`, `fore`, `dosage`, `dosage_unit`, `description`, `location`, `supplier`, `unit`, `quantity`, `created`, `updated`, `batch_code`, `expiry`) VALUES
-(1, 'Tempra Forte', 'TF1', '', '110', 'ML', 'Syrup, 140 ML', 'Stockroom A', '', 'pcs per bottle', 200, '2016-02-28 08:44:52', '2016-03-09 06:31:12', '2016-00001', '2017-04-03'),
-(2, 'Tempra Forte', 'TF2', 'Adult', '155', 'MG', 'Syrup', 'Stockroom C', '', 'box', 300, '2016-02-28 08:44:52', '2016-03-09 06:17:50', '0', '0000-00-00'),
-(21, 'Alaxan', '1535', 'Adult', '140', 'MG', '523532', 'Stockroom A', 'erw', 'pcs', 4, '2016-03-08 04:34:52', '2016-03-09 04:15:02', '0', '0000-00-00'),
-(22, 'gdfff', '1214', 'Adult', '200', 'ML', '4124', 'Stockroom A', 'fsfs', 'pack', 250, '2016-03-08 04:46:58', '2016-03-08 08:01:54', '0', '0000-00-00'),
-(23, 'Police officer', 'PO1', 'Adult', '57', '', 'dd', 'Stockroom A', 'ddd', 'pcs', 55, '2016-03-09 06:28:59', '0000-00-00 00:00:00', '2019-00009999', '2016-03-08');
+  PRIMARY KEY (`department_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `item_category`
+-- Table structure for table `employee`
 --
 
-CREATE TABLE IF NOT EXISTS `item_category` (
-  `category_id` int(10) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`category_id`)
+CREATE TABLE IF NOT EXISTS `employee` (
+  `employee_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `position_id` int(11) NOT NULL,
+  `first_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`employee_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `suppliers`
+-- Table structure for table `employee_department`
 --
 
-CREATE TABLE IF NOT EXISTS `suppliers` (
-  `supplier_id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(255) NOT NULL,
+CREATE TABLE IF NOT EXISTS `employee_department` (
+  `employee_department_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `employee_id` int(11) NOT NULL,
+  `department_id` int(11) NOT NULL,
+  PRIMARY KEY (`employee_department_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `item`
+--
+
+CREATE TABLE IF NOT EXISTS `item` (
+  `item_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `category_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `address` varchar(255) NOT NULL,
-  `contact1` varchar(255) NOT NULL,
-  `contact2` varchar(255) NOT NULL,
+  `code` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `critical_level` int(11) NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`supplier_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
-
---
--- Dumping data for table `suppliers`
---
-
-INSERT INTO `suppliers` (`supplier_id`, `code`, `name`, `address`, `contact1`, `contact2`, `created`, `updated`) VALUES
-(16, 'TF2016-000001', 'Tempra Philippines', 'Tondo, Manila', '787-13-20', '741-28-94', '2016-03-02 05:59:12', '2016-03-02 06:00:21'),
-(17, 'TF2016-000002', 'Unilab Philippines', 'Cabuyao, Laguna', '777-88-99', '123-45-67', '2016-03-09 04:14:27', '2016-03-09 04:14:27');
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Table structure for table `patient`
 --
 
-CREATE TABLE IF NOT EXISTS `users` (
-  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `patient` (
+  `patient_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`patient_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `position`
+--
+
+CREATE TABLE IF NOT EXISTS `position` (
+  `position_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  PRIMARY KEY (`position_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `returned_equipment`
+--
+
+CREATE TABLE IF NOT EXISTS `returned_equipment` (
+  `returned_equipment_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `delivery_equipment_id` int(11) NOT NULL,
+  `returned_by` int(11) NOT NULL,
+  `department_id` int(11) NOT NULL,
+  `reason` text NOT NULL,
+  `returned_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`returned_equipment_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `supplier`
+--
+
+CREATE TABLE IF NOT EXISTS `supplier` (
+  `supplier_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `address` text NOT NULL,
+  PRIMARY KEY (`supplier_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `transaction`
+--
+
+CREATE TABLE IF NOT EXISTS `transaction` (
+  `transaction_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `type` int(11) NOT NULL,
+  `requested_by` int(11) NOT NULL,
+  `department_id` int(11) NOT NULL,
+  `department_head_id` int(11) NOT NULL,
+  `doctor_id` int(11) NOT NULL,
+  `patient_id` int(11) NOT NULL,
+  `requested_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `remarks` text NOT NULL,
+  `image` varchar(255) NOT NULL,
+  PRIMARY KEY (`transaction_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `transaction_item`
+--
+
+CREATE TABLE IF NOT EXISTS `transaction_item` (
+  `transaction_item_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `transaction_id` int(11) NOT NULL,
+  `delivery_item_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  PRIMARY KEY (`transaction_item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `unit`
+--
+
+CREATE TABLE IF NOT EXISTS `unit` (
+  `unit_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `unit` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  PRIMARY KEY (`unit_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
+--
+
+CREATE TABLE IF NOT EXISTS `user` (
+  `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_type` int(11) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `type` int(11) NOT NULL,
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
   `last_activity` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
--- Dumping data for table `users`
+-- Dumping data for table `user`
 --
 
-INSERT INTO `users` (`user_id`, `username`, `password`, `type`, `first_name`, `last_name`, `last_activity`, `created`, `updated`) VALUES
-(1, 'admin', 'qwerty', 1, 'BPHIMS_ADMIN', 'BPHIMS_ADMIN', '0000-00-00 00:00:00', '2016-02-28 06:52:47', '0000-00-00 00:00:00');
+INSERT INTO `user` (`user_id`, `user_type`, `username`, `password`, `first_name`, `last_name`, `last_activity`, `created`, `updated`) VALUES
+(1, 1, 'admin', 'qwerty', 'BPHIMS', 'Administrator', '0000-00-00 00:00:00', '2016-03-15 06:26:54', '2016-03-15 06:26:54');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_type`
+--
+
+CREATE TABLE IF NOT EXISTS `user_type` (
+  `user_type_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  PRIMARY KEY (`user_type_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `user_type`
+--
+
+INSERT INTO `user_type` (`user_type_id`, `name`, `description`) VALUES
+(1, 'admin', '');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
