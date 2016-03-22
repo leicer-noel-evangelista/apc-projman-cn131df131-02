@@ -30,7 +30,20 @@ class Helper {
 	public static function getMessage() {
 		$message = $_SESSION['message'];
 		$_SESSION['message'] = null;
-		return $message;
+		
+		if($message != null){
+			$alertType = ($message['type']==SYS_SUCCESS)?"success":"danger"; 
+			echo '
+			<div class="alert alert-'.$alertType.' alert-dismissible fade in" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<span>'.$message['body'].'</span>
+			</div>
+			';
+		}
+		
+		return null;
 	}
 	
 	public static function getRowFromResultQuery($result) {
@@ -60,6 +73,25 @@ class Helper {
 		return explode("|",$data);
 	}
 	
+	public static function formatDate($date) {
+		return date('F j, Y',strtotime($date));
+	}
+	
+	public static function formatDateComplete($date) {
+		return date('F j, Y @ h:i:s A',strtotime($date));
+	}
+	
+	public static function formatID($id) {
+		return str_pad($id, 6, '0', STR_PAD_LEFT);
+	}
+	
+	public static function formatDBDate($date) {
+		return date('Y-m-d H:i:s',strtotime($date));
+	}
+	
+	public static function formatDatepicker($date) {
+		return date('m/d/Y',strtotime($date));
+	}
 }
 
 ?>

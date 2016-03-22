@@ -1,0 +1,59 @@
+#main-header{
+	background-color:#bbd8e9;
+	padding-bottom:20px;
+}
+
+#main-sidebar{
+	background-color:#ccc;
+	/*border:solid 1px #000;*/
+}
+
+#main-login{
+	background-color:#ccc;
+	/*border:solid 1px #fff;*/
+}
+
+#main-newsfeed{
+
+}
+
+#main-newsfeed .news{
+	border:solid 1px #eee;
+	border-left:solid 5px #aa6708;
+	font-size:10px;
+	line-height:12px;
+	border-radius:3px;
+	padding:10px;
+	margin-bottom:10px;
+}
+
+#main-newsfeed .news .title{
+	font-size:10px;
+	color:#aa6708;
+	font-weight:bold;
+	margin-bottom:5px;
+}
+
+.table-common{
+
+}
+.table-common th{
+	font-size:14px;
+}
+.table-common tr{
+	font-size:12px;
+}
+
+.pagination-selector{
+	width:10%;
+	display:inline;
+}
+
+.common-pagination{
+	margin-bottom:20px;
+}
+
+.default-textarea{
+	min-height:133px;
+	resize:none;
+}

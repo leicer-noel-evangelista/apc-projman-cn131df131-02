@@ -3,65 +3,62 @@ include("init.php");
 
 if(isset($_REQUEST['action']) && !empty($_REQUEST['action'])) {
 	
-	if($_REQUEST['action'] === "login") {
-		$status = BPHIMS::login($_REQUEST);
-		if($status == SYS_SUCCESS) {
-			Helper::redirect("../inventory.php");
+	/**
+		Create delivery action
+	*/
+	if($_REQUEST['action'] === "delivery_create") {
+		$delivery_id = BPHIMS::createDelivery($_REQUEST);
+		if($delivery_id) {
+			Helper::redirect("../deliveries_update.php?delivery_id=".$delivery_id);
 		} else {
-			Helper::createMessage(SYS_ERROR,"Invalid Username or Password!");
-			Helper::redirect("../index.php");
+			Helper::redirect("../deliveries_create.php");
 		}
 	}
 	
-	if($_REQUEST['action'] === "inventory_add") {
-		$status = BPHIMS::addsupplies($_REQUEST);
-		if($status['status'] == SYS_SUCCESS) {
-			Helper::createMessage(SYS_SUCCESS,$status['message']);
-			Helper::redirect("../inventory_edit.php?item_id=".$status['item_id']);
-		} else {
-			Helper::createMessage(SYS_ERROR,$status['message']);
-			Helper::redirect("../inventory_add.php");
-		}
-	}
-	if($_REQUEST['action'] === "inventory_update") {
-		$status = BPHIMS::updateItemInventory($_REQUEST);
-		Helper::createMessage($status['status'],$status['message']);
-		Helper::redirect("../inventory_edit.php?item_id=".$status['item_id']);
-	}
-
-
-	if($_REQUEST['action'] === "inventory_equipment_add") {
-		$status = BPHIMS::addequipment($_REQUEST);
-		if($status['status'] == SYS_SUCCESS) {
-			Helper::createMessage(SYS_SUCCESS,$status['message']);
-			Helper::redirect("../inventory_edit_equipments.php?equipment_id=".$status['equipment_id']);
-		} else {
-			Helper::createMessage(SYS_ERROR,$status['message']);
-			Helper::redirect("../inventory_add_equipments.php");
-		}
-	}
-	if($_REQUEST['action'] === "inventory_equipment_update") {
-		$status = BPHIMS::updateequipmentInventory($_REQUEST);
-		Helper::createMessage($status['status'],$status['message']);
-		Helper::redirect("../inventory_edit_equipments.php?equipment_id=".$status['equipment_id']);
+	/**
+		Update delivery action
+	*/
+	if($_REQUEST['action'] === "delivery_update") {
+		$delivery_id = BPHIMS::updateDelivery($_REQUEST);
+		Helper::redirect("../deliveries_update.php?delivery_id=".$delivery_id);
 	}
 	
-	if($_REQUEST['action'] === "supplier_add") {
-		$status = BPHIMS::addSupplier($_REQUEST);
-		if($status['status'] == SYS_SUCCESS) {
-			Helper::createMessage(SYS_SUCCESS,$status['message']);
-			Helper::redirect("../supplier_edit.php?supplier_id=".$status['supplier_id']);
+	/**
+		Delete delivery action
+	*/
+	if($_REQUEST['action'] === "delivery_delete") {
+		BPHIMS::deleteDelivery($_REQUEST);
+		Helper::redirect("../deliveries.php");
+	}
+	
+	/**
+		Create delivery->equipment action
+	*/
+	if($_REQUEST['action'] === "delivery_equipment_add") {
+		$delivery_equipment_id = BPHIMS::addEquipmentToDelivery($_REQUEST);
+		if($delivery_equipment_id) {
+			Helper::redirect("../deliveries_equipment_update.php?delivery_equipment_id=".$delivery_equipment_id);
 		} else {
-			Helper::createMessage(SYS_ERROR,$status['message']);
-			Helper::redirect("../supplier_add.php");
+			Helper::redirect("../deliveries_equipment_add.php?delivery_id=".$_REQUEST['delivery_id']);
 		}
 	}
 	
+	/**
+		Update delivery->equipment action
+	*/
+	if($_REQUEST['action'] === "delivery_equipment_update") {
+		$delivery_equipment_id = BPHIMS::updateDeliveryEquipment($_REQUEST);
+		Helper::redirect("../deliveries_equipment_update.php?delivery_equipment_id=".$delivery_equipment_id);
+	}
 	
-	if($_REQUEST['action'] === "supplier_update") {
-		$status = BPHIMS::updateSupplier($_REQUEST);
-		Helper::createMessage($status['status'],$status['message']);
-		Helper::redirect("../supplier_edit.php?supplier_id=".$status['supplier_id']);
+	/**
+		Update item action
+	*/
+	if($_REQUEST['action'] === "item_update") {
+		$item_id = BPHIMS::updateItem($_REQUEST);
+		if($item_id) {
+			Helper::redirect("../inventories_update.php?item_id=".$item_id);
+		}
 	}
 	
 }
