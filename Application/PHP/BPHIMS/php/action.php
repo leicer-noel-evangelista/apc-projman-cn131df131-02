@@ -32,6 +32,34 @@ if(isset($_REQUEST['action']) && !empty($_REQUEST['action'])) {
 	}
 	
 	/**
+		Create delivery->supply action
+	*/
+	if($_REQUEST['action'] === "delivery_supply_add") {
+		$delivery_supply_id = BPHIMS::addSupplyToDelivery($_REQUEST);
+		if($delivery_supply_id) {
+			Helper::redirect("../deliveries_supply_update.php?delivery_supply_id=".$delivery_supply_id);
+		} else {
+			Helper::redirect("../deliveries_supply_add.php?delivery_id=".$_REQUEST['delivery_id']);
+		}
+	}
+	
+	/**
+		Update delivery->supply action
+	*/
+	if($_REQUEST['action'] === "delivery_supply_update") {
+		$delivery_supply_id = BPHIMS::updateDeliverySupply($_REQUEST);
+		Helper::redirect("../deliveries_supply_update.php?delivery_supply_id=".$delivery_supply_id);
+	}
+	
+	/**
+		Delete delivery->supply action
+	*/
+	if($_REQUEST['action'] === "delivery_supply_delete") {
+		$delivery_id = BPHIMS::deleteDeliverySupply($_REQUEST);
+		Helper::redirect("../deliveries_supply.php?delivery_id=".$delivery_id);
+	}
+	
+	/**
 		Create delivery->equipment action
 	*/
 	if($_REQUEST['action'] === "delivery_equipment_add") {
@@ -52,6 +80,26 @@ if(isset($_REQUEST['action']) && !empty($_REQUEST['action'])) {
 	}
 	
 	/**
+		Delete delivery->equipment action
+	*/
+	if($_REQUEST['action'] === "delivery_equipment_delete") {
+		$delivery_id = BPHIMS::deleteDeliveryEquipment($_REQUEST);
+		Helper::redirect("../deliveries_equipment.php?delivery_id=".$delivery_id);
+	}
+	
+	/**
+		Create item action
+	*/
+	if($_REQUEST['action'] === "item_create") {
+		$item_id = BPHIMS::createItem($_REQUEST);
+		if($delivery_supply_id) {
+			Helper::redirect("../inventories_create.php?item_id=".$item_id);
+		} else {
+			Helper::redirect("../inventories_update.php?item_id=".$item_id);
+		}
+	}
+	
+	/**
 		Update item action
 	*/
 	if($_REQUEST['action'] === "item_update") {
@@ -59,6 +107,14 @@ if(isset($_REQUEST['action']) && !empty($_REQUEST['action'])) {
 		if($item_id) {
 			Helper::redirect("../inventories_update.php?item_id=".$item_id);
 		}
+	}
+	
+	/**
+		Delete item action
+	*/
+	if($_REQUEST['action'] === "item_delete") {
+		BPHIMS::deleteItem($_REQUEST);
+		Helper::redirect("../".$_REQUEST['return_page'].".php");
 	}
 	
 }

@@ -5,8 +5,8 @@
 	
 	$page = (isset($_GET['page']))?$_GET['page']:1;
 	$offset = BPHIMS_TABLE_LIMIT*($page-1);
-	$equipmentList = BPHIMS::getAllItemViaCategory(BPHIMS_CATEGORY_EQUIPMENT, BPHIMS_TABLE_LIMIT, $offset);
-	$totalRecords = BPHIMS::getAllItemViaCategoryCount(BPHIMS_CATEGORY_EQUIPMENT);
+	$supply_list = BPHIMS::getAllItemViaCategory(BPHIMS_CATEGORY_SUPPLY, BPHIMS_TABLE_LIMIT, $offset);
+	$totalRecords = BPHIMS::getAllItemViaCategoryCount(BPHIMS_CATEGORY_SUPPLY);
 	$totalPages = ceil($totalRecords/BPHIMS_TABLE_LIMIT);
 	$previousPage = ($page!=1)?"inventories_supply.php?page=".($page-1):"";
 	$nextPage = ($page!=$totalPages)?"inventories_supply.php?page=".($page+1):"";
@@ -15,8 +15,8 @@
 	<div class="col-md-12">
 	
 		<div class="pull-left">
-			<h4>Equipment</h4>
-			<p>The page contains all the item equipment records. There are currently <b><?php echo $totalRecords; ?></b> item equipment recorded.</p>
+			<h4>Supplies</h4>
+			<p>The page contains all the item supply records. There are currently <b><?php echo $totalRecords; ?></b> item supply recorded.</p>
 		</div>
 		
 		<div class="checkbox pull-right">
@@ -71,17 +71,17 @@
 			</thead>
 			<tbody>
 				<?php
-					foreach($equipmentList as $equipment) {
-						$dataDeleteName = '#'.Helper::formatID($equipment['item_id']);
+					foreach($supply_list as $supply) {
+						$dataDeleteName = '#'.Helper::formatID($supply['item_id']);
 						echo '
 							<tr">
-								<td class="td1">'.Helper::formatID($equipment['item_id']).'</td>
-								<td class="td2">'.$equipment['name'].'</td>
-								<td class="td3">'.$equipment['code'].'</td>
-								<td class="td4">'.$equipment['critical_level'].'</td>
+								<td class="td1">'.Helper::formatID($supply['item_id']).'</td>
+								<td class="td2">'.$supply['name'].'</td>
+								<td class="td3">'.$supply['code'].'</td>
+								<td class="td4">'.$supply['critical_level'].'</td>
 								<td>
-									<button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-delete" data-delete-name="'.$dataDeleteName.'" data-delete-id="'.$equipment['item_id'].'"><i class="glyphicon glyphicon-trash"></i></button>
-									<a class="btn btn-xs btn-success" href="inventories_update.php?item_id='.$equipment['item_id'].'" data-toggle="tooltip" data-placement="top" title="View / Update"><i class="glyphicon glyphicon-pencil"></i></a>
+									<button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-delete" data-delete-name="'.$dataDeleteName.'" data-delete-id="'.$supply['item_id'].'"><i class="glyphicon glyphicon-trash"></i></button>
+									<a class="btn btn-xs btn-success" href="inventories_update.php?item_id='.$supply['item_id'].'" data-toggle="tooltip" data-placement="top" title="View / Update"><i class="glyphicon glyphicon-pencil"></i></a>
 								</td>
 							</tr>
 						';
@@ -121,7 +121,7 @@
 				<form action="php/action.php" method="post">
 					<input type="hidden" name="action" value="item_delete" />
 					<input type="hidden" name="item_id" id="delete-id" />
-					<input type="hidden" name="return_page" value="inventories_equipment" />
+					<input type="hidden" name="return_page" value="inventories_supply" />
 					<button type="button" class="btn btn-primary" data-dismiss="modal"><i class="glyphicon glyphicon-remove"></i> Cancel</button>
 					<button type="submit" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Delete</button>
 				</form>

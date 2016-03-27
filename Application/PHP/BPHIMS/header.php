@@ -36,7 +36,10 @@
 					<div class="col-md-12">
 						<ul class="nav nav-pills">
 
-					
+							<li class="<?php echo ($active=="home")?"active":""; ?>">
+								<a href="index.php">Home</a>
+							</li>
+							
 							<li class="<?php echo ($active=="dashboard")?"active":""; ?>">
 								<a href="#">Dashboard</a>
 							</li>

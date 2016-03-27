@@ -4,6 +4,7 @@
 	include("header.php");
 	
 	$id = $_GET['item_id'];
+	$totalSupply = BPHIMS::getAllItemViaCategoryCount(BPHIMS_CATEGORY_SUPPLY);
 	$totalEquipment = BPHIMS::getAllItemViaCategoryCount(BPHIMS_CATEGORY_EQUIPMENT);
 	$totalRecords = $totalSupply+$totalEquipment;
 	$categoryList = BPHIMS::getAllCategory();

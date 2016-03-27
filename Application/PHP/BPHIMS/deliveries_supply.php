@@ -7,14 +7,14 @@
 	$supplierList = BPHIMS::getAllSuppliers();
 	$supplyStaff = BPHIMS::getAllEmployeeInDepartment(BPHIMS_DEPARTMENT_SUPPLY);
 	$info = BPHIMS::getDeliveryInformation($id);
-	$equipmentList = BPHIMS::getDeliveryEquipment($id);
+	$supplyList = BPHIMS::getDeliverySupply($id);
 ?>
 <div class="common-body">
 	<div class="col-md-12">
 	
 		<div class="pull-left">
-			<h4>View Delivery Equipment <small>#<?php echo Helper::formatID($id); ?></small></h4>
-			<p>This page contains the list of equipment for the current delivery record</p>
+			<h4>View Delivery Supply <small>#<?php echo Helper::formatID($id); ?></small></h4>
+			<p>This page contains the list of supply for the current delivery record</p>
 		</div>
 		
 		<div class="pull-right">
@@ -100,14 +100,14 @@
 		
 		<hr/>
 		<div class="pull-left">
-			<h4>Delivery Equipment</h4>
-			<p>List of equipment in the delivery</p>
+			<h4>Delivery Supply</h4>
+			<p>List of supply in the delivery</p>
 		</div>
 		<div class="pull-right">
-			<a class="btn btn-primary" href="deliveries_equipment_add.php?delivery_id=<?php echo $id; ?>"><i class="glyphicon glyphicon-plus"></i> Add Delivery Equipment</a>
+			<a class="btn btn-primary" href="deliveries_supply_add.php?delivery_id=<?php echo $id; ?>"><i class="glyphicon glyphicon-plus"></i> Add Delivery Supply</a>
 			<br/>
 			<div class="checkbox pull-right">
-				<label><input type="checkbox" id="delivery-equipment-option" value="delivery-equipment-information"> Show Options</label>
+				<label><input type="checkbox" id="delivery-supply-option" value="delivery-supply-information"> Show Options</label>
 			</div>
 		</div>
 		
@@ -115,26 +115,41 @@
 		
 		<?php $systemMessage = Helper::getMessage();?>
 		
-		<div id="delivery-equipment-information" class="panel panel-default hidden">
+		<div id="delivery-supply-information" class="panel panel-default hidden">
 			<div class="panel-body">
 				<b>Show/Hide Column</b>
 				<div class="checkbox">
-					<label><input type="checkbox" checked="checked" class="show-hide-option" value="td1"> ID</label>
+					<label><input type="checkbox" checked="checked" class="show-hide-option" value="td1"> Supply ID</label>
 				</div>
 				<div class="checkbox">
 					<label><input type="checkbox" checked="checked" class="show-hide-option" value="td2"> Item</label>
 				</div>
 				<div class="checkbox">
-					<label><input type="checkbox" checked="checked" class="show-hide-option" value="td3"> Equipment Code</label>
+					<label><input type="checkbox" class="show-hide-option" value="td3"> Batch Code</label>
 				</div>
 				<div class="checkbox">
-					<label><input type="checkbox" checked="checked" class="show-hide-option" value="td4"> Brand</label>
+					<label><input type="checkbox" class="show-hide-option" value="td4"> Dispense</label>
 				</div>
 				<div class="checkbox">
-					<label><input type="checkbox" checked="checked" class="show-hide-option" value="td5"> Warranty</label>
+					<label><input type="checkbox" checked="checked" class="show-hide-option" value="td5"> Quantity</label>
 				</div>
 				<div class="checkbox">
-					<label><input type="checkbox" checked="checked" class="show-hide-option" value="td6"> Location</label>
+					<label><input type="checkbox" checked="checked" class="show-hide-option" value="td6"> Dosage</label>
+				</div>
+				<div class="checkbox">
+					<label><input type="checkbox" checked="checked" class="show-hide-option" value="td7"> Age</label>
+				</div>
+				<div class="checkbox">
+					<label><input type="checkbox" class="show-hide-option" value="td8"> Brand</label>
+				</div>
+				<div class="checkbox">
+					<label><input type="checkbox" checked="checked" class="show-hide-option" value="td9"> Restricted</label>
+				</div>
+				<div class="checkbox">
+					<label><input type="checkbox" checked="checked" class="show-hide-option" value="td10"> Expiry</label>
+				</div>
+				<div class="checkbox">
+					<label><input type="checkbox" checked="checked" class="show-hide-option" value="td11"> Location</label>
 				</div>
 			</div>
 		</div>
@@ -144,27 +159,37 @@
 				<thead>
 					<th class="td1">ID</th>
 					<th class="td2">Item</th>
-					<th class="td3">Equipment Code</th>
-					<th class="td4">Brand</th>
-					<th class="td5">Warranty</th>
-					<th class="td6">Location</th>
+					<th class="td3 hidden">Batch Code</th>
+					<th class="td4 hidden">Dispense</th>
+					<th class="td5">Quantity</th>
+					<th class="td6">Dosage</th>
+					<th class="td7">Age</th>
+					<th class="td8 hidden">Brand</th>
+					<th class="td9">Restricted</th>
+					<th class="td10">Expiry</th>
+					<th class="td11">Location</th>
 					<th>Actions</th>
 				</thead>
 				<tbody>
 					<?php
-						foreach($equipmentList as $equipment) {
-							$dataDeleteName = '#'.Helper::formatID($equipment['delivery_equipment_id']).' - '.$equipment['item_name'];
+						foreach($supplyList as $supply) {
+							$dataDeleteName = '#'.Helper::formatID($supply['delivery_supply_id']).' - '.$supply['item_name'];
 							echo '
 								<tr">
-									<td class="td1">'.Helper::formatID($equipment['delivery_equipment_id']).'</td>
-									<td class="td2">'.$equipment['item_name'].'</td>
-									<td class="td3">'.$equipment['equipment_code'].'</td>
-									<td class="td4">'.$equipment['brand'].'</td>
-									<td class="td5">'.Helper::formatDate($equipment['warranty']).'</td>
-									<td class="td6">'.$equipment['location'].'</td>
+									<td class="td1">'.Helper::formatID($supply['delivery_supply_id']).'</td>
+									<td class="td2">'.$supply['item_name'].'</td>
+									<td class="td3 hidden">'.$supply['batch_code'].'</td>
+									<td class="td4 hidden">'.$supply['dispense'].'</td>
+									<td class="td5">'.$supply['quantity'].' '.$supply['unit'].'</td>
+									<td class="td6">'.$supply['dosage'].' '.$supply['dosage_unit'].'</td>
+									<td class="td7">'.$supply['age'].'</td>
+									<td class="td8 hidden">'.$supply['brand'].'</td>
+									<td class="td9">'.(($supply['is_restricted'])?"Yes":"No").'</td>
+									<td class="td10">'.Helper::formatDate($supply['expiry']).'</td>
+									<td class="td11">'.$supply['location'].'</td>
 									<td>
-										<button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-delete" data-delete-name="'.$dataDeleteName.'" data-delete-id="'.$equipment['delivery_equipment_id'].'"><i class="glyphicon glyphicon-trash"></i></button>
-										<a class="btn btn-xs btn-success" href="deliveries_equipment_update.php?delivery_equipment_id='.$equipment['delivery_equipment_id'].'" data-toggle="tooltip" data-placement="top" title="View / Update"><i class="glyphicon glyphicon-pencil"></i></a>
+										<button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-delete" data-delete-name="'.$dataDeleteName.'" data-delete-id="'.$supply['delivery_supply_id'].'"><i class="glyphicon glyphicon-trash"></i></button>
+										<a class="btn btn-xs btn-success" href="deliveries_supply_update.php?delivery_supply_id='.$supply['delivery_supply_id'].'" data-toggle="tooltip" data-placement="top" title="View / Update"><i class="glyphicon glyphicon-pencil"></i></a>
 									</td>
 								</tr>
 							';
@@ -190,9 +215,9 @@
 			</div>
 			<div class="modal-footer">
 				<form action="php/action.php" method="post">
-					<input type="hidden" name="action" value="delivery_equipment_delete" />
+					<input type="hidden" name="action" value="delivery_supply_delete" />
 					<input type="hidden" name="delivery_id" value="<?php echo $id; ?>" />
-					<input type="hidden" name="delivery_equipment_id" id="delete-id" />
+					<input type="hidden" name="delivery_supply_id" id="delete-id" />
 					<button type="button" class="btn btn-primary" data-dismiss="modal"><i class="glyphicon glyphicon-remove"></i> Cancel</button>
 					<button type="submit" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Delete</button>
 				</form>
@@ -202,6 +227,6 @@
 </div>
 
 <?php
-	$listOfJS = array('deliveries_equipment');
+	$listOfJS = array('deliveries_supply');
 	include("footer.php");
 ?>

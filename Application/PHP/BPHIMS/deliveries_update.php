@@ -7,6 +7,7 @@
 	$supplierList = BPHIMS::getAllSuppliers();
 	$supplyStaff = BPHIMS::getAllEmployeeInDepartment(BPHIMS_DEPARTMENT_SUPPLY);
 	$info = BPHIMS::getDeliveryInformation($id);
+	$totalSupply = count(BPHIMS::getDeliverySupply($id));
 	$totalEquipment = count(BPHIMS::getDeliveryEquipment($id));
 ?>
 <div class="common-body">
