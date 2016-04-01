@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 21, 2016 at 11:05 AM
+-- Generation Time: Mar 30, 2016 at 05:32 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 5.5.30
 
@@ -121,7 +121,7 @@ CREATE TABLE `delivery_supply` (
   `age` varchar(255) NOT NULL,
   `brand` varchar(255) NOT NULL,
   `is_restricted` tinyint(1) NOT NULL DEFAULT '0',
-  `expiry` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `expiry` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `location` varchar(255) NOT NULL,
   `is_deleted` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -131,22 +131,22 @@ CREATE TABLE `delivery_supply` (
 --
 
 INSERT INTO `delivery_supply` (`delivery_supply_id`, `delivery_id`, `item_id`, `batch_code`, `dispense`, `quantity`, `unit_id`, `dosage`, `dosage_unit_id`, `age`, `brand`, `is_restricted`, `expiry`, `location`, `is_deleted`) VALUES
-(1, 1, 1, 'BC000001', 0, 100, 20, 500, 14, 'Adult 10-20', 'Mercury', 0, '2016-03-15 08:30:45', 'Storage A', 0),
-(2, 1, 2, 'BC000001', 0, 200, 20, 200, 14, 'Children 3-7', 'Mercury', 0, '2016-03-15 08:31:51', 'Storage A', 0),
+(1, 1, 1, 'BC000001', 0, 100, 20, 500, 14, '4+', 'Mercury', 0, '2016-03-28 11:43:51', 'Storage A', 0),
+(2, 1, 2, 'BC000001', 0, 199, 20, 200, 14, '8+', 'Mercury', 0, '2016-03-30 11:27:14', 'Storage A', 0),
 (3, 1, 2, 'BC000001', 0, 200, 20, 310, 2, '4+', 'ADC', 0, '2016-03-30 16:00:00', 'S-A', 0),
-(4, 1, 16, '77', 0, 66, 20, 400, 19, '7+', 'Johnson', 0, '2016-03-30 16:00:00', 'SB0', 0),
+(4, 1, 16, '77', 0, 66, 20, 400, 19, '7+', 'Johnson', 1, '2016-04-15 10:10:52', 'SB0', 0),
 (5, 1, 12, '97776', 0, 800, 20, 7, 15, '6', '5', 0, '2016-03-20 02:52:58', '4', 1),
 (6, 1, 15, '11', 0, 22, 4, 33, 3, '44', '55', 0, '2016-03-20 02:53:07', '66', 1),
 (7, 1, 4, 'BC000001', 0, 55, 16, 100, 15, '7+', 'GGH', 0, '2016-03-22 16:00:00', 'SSB', 0),
 (8, 1, 19, '110', 0, 720, 8, 320, 7, '11+', '550', 0, '2016-03-23 16:00:00', '34', 0),
 (9, 1, 19, '110', 0, 220, 8, 330, 7, '6+', '550', 0, '2016-03-23 16:00:00', '660', 0),
-(10, 1, 19, '110', 0, 220, 8, 330, 7, '440', '550', 0, '2016-03-20 02:53:23', '660', 1),
-(11, 1, 19, '110', 0, 220, 8, 330, 7, '440', '550', 1, '2016-03-20 02:53:19', '660', 1),
+(10, 1, 19, '110', 0, 220, 8, 330, 7, '3+', '550', 0, '2016-03-28 11:44:02', '660', 1),
+(11, 1, 19, '110', 0, 220, 8, 330, 7, '10+', '550', 1, '2016-03-29 08:27:51', '660', 1),
 (12, 1, 12, '9', 0, 800, 8, 7, 15, '6', '5', 0, '2016-03-20 02:53:16', '4', 1),
 (13, 1, 2, '1', 0, 800, 1, 3, 2, '4', '5', 0, '2016-03-20 02:53:12', '7', 1),
 (14, 1, 2, '1', 0, 2000, 1, 3, 2, '4', '5', 0, '2016-03-20 02:52:08', '7', 1),
 (15, 1, 2, '1', 0, 80, 1, 3, 2, '4', '5', 0, '2016-03-20 02:51:32', '7', 1),
-(16, 2, 1, 'BC000002', 0, 200, 21, 57, 13, '13+', 'GGD', 0, '2016-03-30 16:00:00', 'FF', 0),
+(16, 2, 1, 'BC000002', 0, 155, 21, 57, 13, '13+', 'GGD', 0, '2016-05-11 11:27:52', 'FF', 0),
 (17, 2, 2, 'BC000002', 0, 550, 22, 55, 7, '3+', 'Akola', 0, '2016-03-22 16:00:00', 'DF', 0),
 (18, 2, 3, 'BC000002', 0, 57, 21, 88, 14, '>3', 'KKL', 0, '2016-03-22 16:00:00', 'GG', 0);
 
@@ -200,7 +200,11 @@ INSERT INTO `employee` (`employee_id`, `position_id`, `first_name`, `last_name`)
 (9, 3, 'Leo', 'Martinez'),
 (10, 3, 'Ana', 'Hernandez'),
 (11, 4, 'Dominic', 'Sanchez'),
-(12, 4, 'Sheryl', 'Anchorez');
+(12, 4, 'Sheryl', 'Anchorez'),
+(13, 2, 'Gary', 'James'),
+(14, 2, 'Lourdes Anne', 'Joy'),
+(15, 2, 'Lito', 'Palid'),
+(16, 2, 'Johnny Alex', 'Boy');
 
 -- --------------------------------------------------------
 
@@ -234,7 +238,11 @@ INSERT INTO `employee_department` (`employee_department_id`, `employee_id`, `dep
 (13, 9, 2),
 (14, 10, 2),
 (15, 11, 3),
-(16, 12, 3);
+(16, 12, 3),
+(17, 13, 1),
+(18, 14, 2),
+(19, 15, 2),
+(20, 16, 1);
 
 -- --------------------------------------------------------
 
@@ -389,6 +397,13 @@ CREATE TABLE `transaction` (
   `image` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `transaction`
+--
+
+INSERT INTO `transaction` (`transaction_id`, `type`, `requested_by`, `department_id`, `department_head_id`, `doctor_id`, `patient_id`, `requested_date`, `remarks`, `image`) VALUES
+(1, 1, 2, 1, 1, 0, 0, '2016-03-22 06:54:02', '', '');
+
 -- --------------------------------------------------------
 
 --
@@ -398,9 +413,19 @@ CREATE TABLE `transaction` (
 CREATE TABLE `transaction_item` (
   `transaction_item_id` int(10) UNSIGNED NOT NULL,
   `transaction_id` int(11) NOT NULL,
+  `delivery_item_type` int(11) NOT NULL,
   `delivery_item_id` int(11) NOT NULL,
   `quantity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `transaction_item`
+--
+
+INSERT INTO `transaction_item` (`transaction_item_id`, `transaction_id`, `delivery_item_type`, `delivery_item_id`, `quantity`) VALUES
+(1, 1, 1, 1, 2),
+(2, 1, 1, 2, 4),
+(3, 1, 2, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -606,7 +631,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `delivery`
 --
 ALTER TABLE `delivery`
-  MODIFY `delivery_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
+  MODIFY `delivery_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `delivery_equipment`
 --
@@ -626,12 +651,12 @@ ALTER TABLE `department`
 -- AUTO_INCREMENT for table `employee`
 --
 ALTER TABLE `employee`
-  MODIFY `employee_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `employee_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT for table `employee_department`
 --
 ALTER TABLE `employee_department`
-  MODIFY `employee_department_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `employee_department_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT for table `item`
 --
@@ -661,12 +686,12 @@ ALTER TABLE `supplier`
 -- AUTO_INCREMENT for table `transaction`
 --
 ALTER TABLE `transaction`
-  MODIFY `transaction_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `transaction_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `transaction_item`
 --
 ALTER TABLE `transaction_item`
-  MODIFY `transaction_item_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `transaction_item_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `unit`
 --

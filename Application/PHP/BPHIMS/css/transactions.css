@@ -1,0 +1,131 @@
+.ajax_container{
+	height:0;
+	z-index:1;
+	position:relative;
+	margin-top:5px;
+}
+
+.ajax_container .ajax_result{
+	border-left:solid 1px #ccc;
+	border-right:solid 1px #ccc;
+	border-bottom:solid 1px #ccc;
+	padding:5px 0;
+	cursor:pointer;
+	background:#fff;
+	position:relative;
+}
+
+.ajax_container .ajax_result.initial_selected{
+	background:#bbd8e9;
+}
+
+.ajax_container .ajax_result.first_result{
+	border-top:solid 1px #ccc;
+}
+
+.ajax_container .ajax_result:hover{
+	background:#bbd8e9;
+}
+
+.ajax_container .ajax_result img{
+	margin-left:10px;
+	margin-right:10px;
+	width:50px;
+}
+
+.ajax_container .ajax_result span{
+	color:#999;
+	font-size:12px;
+}
+
+.ajax_container .ajax_result .ajax_label{
+	height:18px;
+	line-height:18px;
+	width:100px;
+	position:absolute;
+	background:#d9534f;
+	right:20px;
+	font-size:10px;
+	text-align:center;
+	color:#fff;
+}
+
+.ajax_container .ajax_result .ajax_label.label_location{
+	background:#337ab7;
+	top:20px;
+}
+
+.ajax_container .ajax_result .ajax_label.label_age{
+	background:#f0ad4e;
+	top:40px;
+}
+
+.ajax_container .ajax_result .ajax_label.label_restriction{
+	background:#d9534f;
+	top:60px;
+}
+
+.ajax_selected_display{
+	border:solid 1px #ccc;
+	border-radius:5px;
+	padding:3px 0;
+	background:#fff;
+}
+
+.ajax_selected_display img{
+	margin-left:10px;
+	margin-right:10px;
+	width:26px;
+}
+
+.ajax_selected_display span{
+	color:#999;
+	font-size:12px;
+}
+
+.ajax_selected_display i{
+	color:#d9534f;
+	cursor:pointer;
+	margin:5px;
+}
+
+.ajax_item_adder{
+	background:#ccc;
+	border-radius:5px;
+	padding:7px 0;
+}
+
+.selected_supply_container{
+	margin-bottom:10px;
+}
+
+.selected_supply_container th{
+	text-align:center;
+	padding:10px 0;
+	border:solid 1px #ccc;
+}
+
+.selected_supply_container td{
+	padding:0 20px;
+	border:solid 1px #ccc;
+}
+
+.selected_supply_container .counter{
+	background:#ccc;
+	font-size:25px;
+	text-align:center;
+}
+
+.selected_supply_container .details{
+	padding-top:5px;
+	padding-bottom:5px;
+}
+
+.selected_supply_container .details span{
+	color:#999;
+	font-size:12px;
+}
+
+.selected_supply_container .quantity{
+	text-align:center;
+}

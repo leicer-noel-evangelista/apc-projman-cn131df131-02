@@ -38,8 +38,8 @@
 
 							<li class="<?php echo ($active=="home")?"active":""; ?>">
 								<a href="index.php">Home</a>
-							</li>
-							
+							</li>	
+
 							<li class="<?php echo ($active=="dashboard")?"active":""; ?>">
 								<a href="#">Dashboard</a>
 							</li>
@@ -47,10 +47,13 @@
 								<a class="dropdown-toggle" data-toggle="dropdown" href="#">Transactions<b class="caret"></b></a>
 								<ul class="dropdown-menu">
 									<li>
-										<a href="#">View Transactions</a>
+										<a href="transactions.php">View Transactions</a>
 									</li>
 									<li>
-										<a href="#">Create Transactions</a>
+										<a href="transactions_department_create.php">Create Department Request</a>
+									</li>
+									<li>
+										<a href="transactions_doctor_create.php">Create Doctor Request</a>
 									</li>
 								</ul>
 							</li>

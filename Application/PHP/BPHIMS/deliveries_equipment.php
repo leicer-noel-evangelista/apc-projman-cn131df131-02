@@ -101,7 +101,7 @@
 		<hr/>
 		<div class="pull-left">
 			<h4>Delivery Equipment</h4>
-			<p>List of equipment in the delivery</p>
+			<p>List of eqipment in the delivery</p>
 		</div>
 		<div class="pull-right">
 			<a class="btn btn-primary" href="deliveries_equipment_add.php?delivery_id=<?php echo $id; ?>"><i class="glyphicon glyphicon-plus"></i> Add Delivery Equipment</a>

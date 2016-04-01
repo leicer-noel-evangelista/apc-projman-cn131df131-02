@@ -292,7 +292,7 @@ class BPHIMS {
 	}
 	
 	/**
-		This method returns all records in delivery table
+		This method returns the total number of records in delivery table
 	*/
 	public static function getAllDeliveriesCount() {
 		// Open DB
@@ -1078,6 +1078,246 @@ class BPHIMS {
 				c.category_id
 			";
 
+		// Query Database
+		$query = mysql_query($sql,$db);
+		
+		// Fetch Details
+		$result = Helper::getListFromResultQuery($query);
+		
+		// Close DB
+		Helper::closeDB($db);
+		
+		// Return status 
+		return $result;
+	}
+	
+	############################################################
+	#                                                          #
+	#	Transactions                                           #
+	#                                                          #
+	############################################################
+	
+	/**
+		This method returns all records in transaction table
+	*/
+	public static function getAllTransactions($limit, $offset) {
+		// Open DB
+		$db = Helper::openDB();
+		
+		// Create Query
+		$sql = "
+			SELECT
+				t.transaction_id, t.type, t.requested_by, t.requested_date, t.remarks,
+				e.first_name, e.last_name,
+				COUNT(CASE WHEN ti.delivery_item_type=".BPHIMS_ITEM_SUPPLY." THEN 1 END) AS supply_count,
+				COUNT(CASE WHEN ti.delivery_item_type=".BPHIMS_ITEM_EQUIPMENT." THEN 1 END) AS equipment_count
+			FROM
+				`transaction` t
+			LEFT JOIN `employee` e ON e.employee_id=t.requested_by
+			INNER JOIN `transaction_item` ti ON ti.transaction_id=t.transaction_id
+			ORDER BY
+				t.requested_date DESC
+			LIMIT ".$limit." OFFSET ".$offset."
+			";
+			
+		// Query Database
+		$query = mysql_query($sql,$db);
+		
+		// Fetch Details
+		$result = Helper::getListFromResultQuery($query);
+		
+		// Close DB
+		Helper::closeDB($db);
+		
+		// Return status 
+		return $result;
+	}
+	
+	/**
+		This method returns the total number of records in transaction table
+	*/
+	public static function getAllTransactionsCount() {
+		// Open DB
+		$db = Helper::openDB();
+		
+		// Create Query
+		$sql = "
+			SELECT
+				COUNT(*) as total
+			FROM
+				`transaction` t
+			";
+			
+		// Query Database
+		$query = mysql_query($sql,$db);
+		
+		// Fetch Details
+		$result = Helper::getRowFromResultQuery($query);
+		
+		// Close DB
+		Helper::closeDB($db);
+		
+		// Return status 
+		return $result['total'];	
+	}
+	
+	############################################################
+	#                                                          #
+	#	AJAX REQUEST                                           #
+	#                                                          #
+	############################################################
+	
+	/**
+		AJAX request for users
+	*/
+	public static function getUsersViaAjax($data) {
+		// Open DB
+		$db = Helper::openDB();
+		
+		// Create Query
+		$sql = "
+			SELECT
+				e.employee_id, e.first_name, e.last_name,
+				p.title AS position_title
+			FROM
+				`employee` e
+			LEFT JOIN `position` p ON p.position_id=e.position_id 
+			WHERE
+				e.employee_id LIKE '%".$data['keyword']."%' OR
+				e.first_name LIKE '%".$data['keyword']."%' OR
+				e.last_name LIKE '%".$data['keyword']."%' OR
+				CONCAT(e.first_name,' ', e.last_name) LIKE '%".$data['keyword']."%' OR
+				CONCAT(e.last_name,', ', e.first_name) LIKE '%".$data['keyword']."%'
+			LIMIT ".$data['limit']."
+			";
+			
+		// Query Database
+		$query = mysql_query($sql,$db);
+		
+		// Fetch Details
+		$result = Helper::getListFromResultQuery($query);
+		
+		// Close DB
+		Helper::closeDB($db);
+		
+		// Return status 
+		return $result;
+	}
+	
+	/**
+		AJAX request for departments
+	*/
+	public static function getDepartmentsViaAjax($data) {
+		// Open DB
+		$db = Helper::openDB();
+		
+		// Create Query
+		$sql = "
+			SELECT
+				d.department_id, d.name, d.description
+			FROM
+				`department` d
+			WHERE
+				d.name LIKE '%".$data['keyword']."%'
+			LIMIT ".$data['limit']."
+			";
+			
+		// Query Database
+		$query = mysql_query($sql,$db);
+		
+		// Fetch Details
+		$result = Helper::getListFromResultQuery($query);
+		
+		// Close DB
+		Helper::closeDB($db);
+		
+		// Return status 
+		return $result;
+	}
+	
+	/**
+		AJAX request for departments
+	*/
+	public static function getHeadOfDepartmentsViaAjax($data) {
+		// Open DB
+		$db = Helper::openDB();
+		
+		// Create Query
+		$sql = "
+			SELECT
+				e.employee_id, e.first_name, e.last_name,
+				d.name AS department_name,
+				p.title AS position_title
+			FROM
+				`employee` e, `employee_department` ed, `department` d, `position` p
+			WHERE
+				(
+					e.employee_id LIKE '%".$data['keyword']."%' OR
+					e.first_name LIKE '%".$data['keyword']."%' OR
+					e.last_name LIKE '%".$data['keyword']."%' OR
+					CONCAT(e.first_name,' ', e.last_name) LIKE '%".$data['keyword']."%' OR
+					CONCAT(e.last_name,', ', e.first_name) LIKE '%".$data['keyword']."%'
+				)
+			AND
+				(
+					e.position_id = p.position_id AND
+					e.position_id = ".BPHIMS_POSITION_DEPARTMENT_HEAD."
+				)
+			AND
+				(
+					ed.employee_id = e.employee_id AND
+					ed.department_id = d.department_id AND
+					d.department_id = ".$data['department_id']."
+				)
+			LIMIT 5
+			";
+			
+		// Query Database
+		$query = mysql_query($sql,$db);
+		
+		// Fetch Details
+		$result = Helper::getListFromResultQuery($query);
+		
+		// Close DB
+		Helper::closeDB($db);
+		
+		// Return status 
+		return $result;
+	}
+	
+	
+	
+	/**
+		AJAX request for departments
+	*/
+	public static function getItemSupplyViaAjax($data) {
+		// Open DB
+		$db = Helper::openDB();
+		
+		// Create Query
+		$sql = "
+			SELECT
+				i.item_id, i.name, i.code,
+				ds.delivery_supply_id, ds.batch_code, ds.dispense, ds.quantity, ds.age, ds.brand, ds.is_restricted, ds.expiry, ds.location, ds.dosage,
+				u.unit,
+				ud.unit AS dosage_unit
+			FROM
+				`delivery_supply` ds
+			LEFT JOIN `item` i ON i.item_id = ds.item_id
+			LEFT JOIN `unit` u ON u.unit_id = ds.unit_id
+			LEFT JOIN `unit` ud ON ud.unit_id = ds.dosage_unit_id
+			WHERE
+				(
+					i.name LIKE '%".$data['keyword']."%' OR
+					i.code LIKE '%".$data['keyword']."%'
+				)
+				AND
+				(
+					ds.expiry >= DATE_ADD(CURDATE(), INTERVAL +1 DAY)
+				)
+			LIMIT ".$data['limit']."
+			";
+			
 		// Query Database
 		$query = mysql_query($sql,$db);
 		

@@ -92,6 +92,18 @@ class Helper {
 	public static function formatDatepicker($date) {
 		return date('m/d/Y',strtotime($date));
 	}
+	
+	public static function daysLeft($date) {
+		$today = strtotime(date('Y-m-d'));
+		$finish = strtotime($date);
+		$difference = $finish-$today;
+		$result = floor($difference / (60 * 60 * 24));
+		if($result > 0) {
+			return $result.' days left';
+		} else {
+			return 'EXPIRED';
+		}
+	}
 }
 
 ?>
