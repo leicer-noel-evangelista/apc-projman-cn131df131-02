@@ -8,8 +8,8 @@
 	$transactionList = BPHIMS::getAllTransactions(BPHIMS_TABLE_LIMIT,$offset);
 	$totalRecords = BPHIMS::getAllTransactionsCount();
 	$totalPages = ceil($totalRecords/BPHIMS_TABLE_LIMIT);
-	$previousPage = ($page!=1)?"deliveries.php?page=".($page-1):"";
-	$nextPage = ($page!=$totalPages)?"deliveries.php?page=".($page+1):"";
+	$previousPage = ($page!=1)?"transactions.php?page=".($page-1):"";
+	$nextPage = ($page!=$totalPages)?"transactions.php?page=".($page+1):"";
 ?>
 <div class="common-body">
 	<div class="col-md-12">
@@ -81,17 +81,24 @@
 				<?php
 					foreach($transactionList as $transaction) {
 						$dataDeleteName = '#'.Helper::formatID($transaction['transaction_id']);
+						$transactionLabel = "";
+						if($transaction['type'] == BPHIMS_TRANSACTION_DOCTOR) {
+							$transactionLabel = '<span class="label label-warning">DOCTOR</span>';
+						} else {
+							$transactionLabel = '<span class="label label-primary">DEPARTMENT</span>';
+						}
+						
 						echo '
 							<tr">
 								<td class="td1">'.Helper::formatID($transaction['transaction_id']).'</td>
-								<td class="td2">'.$transaction['type'].'</td>
+								<td class="td2">'.$transactionLabel.'</td>
 								<td class="td3">'.$transaction['last_name'].', '.$transaction['first_name'].'</td>
 								<td class="td4">'.Helper::formatDate($transaction['requested_date']).'</td>
-								<td class="td5">'.$transaction['supply_count'].'</td>
-								<td class="td6">'.$transaction['equipment_count'].'</td>
+								<td class="td5">'.count(BPHIMS::getAllTransactionItems($transaction['transaction_id'], BPHIMS_ITEM_SUPPLY)).'</td>
+								<td class="td6">'.count(BPHIMS::getAllTransactionItems($transaction['transaction_id'], BPHIMS_ITEM_EQUIPMENT)).'</td>
 								<td>
 									<button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-delete" data-delete-name="'.$dataDeleteName.'" data-delete-id="'.$transaction['transaction_id'].'"><i class="glyphicon glyphicon-trash"></i></button>
-									<a class="btn btn-xs btn-success" href="deliveries_update.php?transaction_id='.$transaction['transaction_id'].'" data-toggle="tooltip" data-placement="top" title="View / Update"><i class="glyphicon glyphicon-pencil"></i></a>
+									<a class="btn btn-xs btn-success" href="deliveries_update.php?transaction_id='.$transaction['transaction_id'].'" data-toggle="tooltip" data-placement="top" title="View / Update"><i class="glyphicon glyphicon-edit"></i></a>
 								</td>
 							</tr>
 						';

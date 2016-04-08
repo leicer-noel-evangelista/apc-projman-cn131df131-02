@@ -5,8 +5,8 @@
 	
 	$id = $_GET['delivery_supply_id'];
 	$supplierList = BPHIMS::getAllSuppliers();
-	$itemList = BPHIMS::getAllItems();
-	$unitList = BPHIMS::getAllUnits();
+	$unitQuantity = BPHIMS::getAllUnits(BPHIMS_UNIT_QUANTITY);
+	$unitDosage = BPHIMS::getAllUnits(BPHIMS_UNIT_DOSAGE);
 	$supplyStaff = BPHIMS::getAllEmployeeInDepartment(BPHIMS_DEPARTMENT_SUPPLY);
 	$infoSupply = BPHIMS::getSupplyInformation($id);
 	$info = BPHIMS::getDeliveryInformation($infoSupply['delivery_id']);
@@ -130,7 +130,7 @@
 						<label for="unit_id">Unit</label>
 						<select  class="form-control" id="unit_id" name="unit_id" required>
 						<?php
-							foreach($unitList as $unit) {
+							foreach($unitQuantity as $unit) {
 								echo '<option value="'.$unit['unit_id'].'" '.(($infoSupply['unit_id']==$unit['unit_id'])?'selected="selected"':'').'>'.$unit['unit'].'</option>';
 							}
 						?>
@@ -144,7 +144,7 @@
 						<label for="dosage_unit_id">Dosage Unit</label>
 						<select  class="form-control" id="dosage_unit_id" name="dosage_unit_id" value="<?php echo $infoSupply['dosage_unit_id']; ?>" required>
 						<?php
-							foreach($unitList as $unit) {
+							foreach($unitDosage as $unit) {
 								echo '<option value="'.$unit['unit_id'].'" '.(($infoSupply['dosage_unit_id']==$unit['unit_id'])?'selected="selected"':'').'>'.$unit['unit'].'</option>';
 							}
 						?>

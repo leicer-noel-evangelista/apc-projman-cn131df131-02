@@ -23,13 +23,14 @@
 		}
 		?>
 		<title><?php echo BPHIMS_WEB_TITLE; ?></title>
+		<link rel="icon" href="img/default/icon.png">
 	</head>
 	<body>
 		<div id="main-header">
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12">
-						<h3><?php echo BPHIMS_APPLICATION_NAME; ?></h3>
+						<h3> <img src="img/default/logo.png">  <span></span> <?php echo BPHIMS_APPLICATION_NAME; ?></h3>
 					</div>
 				</div>
 				<div class="row">
@@ -38,10 +39,10 @@
 
 							<li class="<?php echo ($active=="home")?"active":""; ?>">
 								<a href="index.php">Home</a>
-							</li>	
+							</li>
 
 							<li class="<?php echo ($active=="dashboard")?"active":""; ?>">
-								<a href="#">Dashboard</a>
+								<a href="dashboard.php">Dashboard</a>
 							</li>
 							<li class="dropdown <?php echo ($active=="transactions")?"active":""; ?>">
 								<a class="dropdown-toggle" data-toggle="dropdown" href="#">Transactions<b class="caret"></b></a>

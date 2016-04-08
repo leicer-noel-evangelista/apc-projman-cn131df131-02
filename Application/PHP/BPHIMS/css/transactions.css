@@ -5,6 +5,15 @@
 	margin-top:5px;
 }
 
+.ajax_container .ajax_result_no_result{
+	border:solid 1px #ccc;
+	padding:10px;
+	cursor:pointer;
+	background:#fff;
+	position:relative;
+	background:#ccc;
+}
+
 .ajax_container .ajax_result{
 	border-left:solid 1px #ccc;
 	border-right:solid 1px #ccc;
@@ -95,6 +104,9 @@
 	padding:7px 0;
 }
 
+/**
+	Supply CSS
+*/
 .selected_supply_container{
 	margin-bottom:10px;
 }
@@ -128,4 +140,61 @@
 
 .selected_supply_container .quantity{
 	text-align:center;
+}
+
+.selected_supply_container .actions{
+	text-align:center;
+}
+
+/**
+	Equipment CSS
+*/
+.selected_equipment_container{
+	margin-bottom:10px;
+}
+
+.selected_equipment_container th{
+	text-align:center;
+	padding:10px 0;
+	border:solid 1px #ccc;
+}
+
+.selected_equipment_container td{
+	padding:0 20px;
+	border:solid 1px #ccc;
+}
+
+.selected_equipment_container .counter{
+	background:#ccc;
+	font-size:25px;
+	text-align:center;
+}
+
+.selected_equipment_container .details{
+	padding-top:5px;
+	padding-bottom:5px;
+}
+
+.selected_equipment_container .details span{
+	color:#999;
+	font-size:12px;
+}
+
+.selected_equipment_container .quantity{
+	text-align:center;
+}
+
+.selected_equipment_container .actions{
+	text-align:center;
+}
+
+.final_confirmation{
+	background:#ccc;
+	padding-top:10px;
+	padding-bottom:10px;
+	border-radius:10px;
+}
+
+.final_confirmation button{
+	margin-left:10px;
 }

@@ -7,8 +7,8 @@
 	<div class="col-md-12">
 	
 		<div class="pull-left">
-			<h4>Create Department Request</h4>
-			<p>This page will create a transaction requested by the department.</p>
+			<h4>Create Doctor Request</h4>
+			<p>This page will create a transaction requested by the doctors.</p>
 		</div>
 		
 		<div class="pull-right">
@@ -24,32 +24,32 @@
 		
 		<!-- Forms -->
 		<form id="form_create" action="php/action.php" method="post">
-			<input type="hidden" name="action" value="transactions_department_create"/>
-			<input type="hidden" name="type" value="<?php echo BPHIMS_TRANSACTION_DEPARTMENT; ?>"/>
+			<input type="hidden" name="action" value="transactions_doctor_create"/>
+			<input type="hidden" name="type" value="<?php echo BPHIMS_TRANSACTION_DOCTOR; ?>"/>
 			<div class="col-md-12">
+			
+				<div class="form-group">
+					<label for="doctor_id_selection">Doctor</label>
+					<input id="doctor_id_selection" type="text" class="form-control ajax_searcher" action="transaction_doctor_id" target="doctor_id" />
+					<div class="ajax_container hidden"></div>
+					<div class="ajax_selected_display hidden"></div>
+					<input type="hidden" id="doctor_id" class="field_required" name="doctor_id" value="" required />
+				</div>
 			
 				<div class="form-group">
 					<label for="requested_by_selection">Requested By</label>
 					<input id="requested_by_selection" type="text" class="form-control ajax_searcher" action="transaction_requested_by" target="requested_by" />
 					<div class="ajax_container hidden"></div>
 					<div class="ajax_selected_display hidden"></div>
-					<input type="hidden" id="requested_by" name="requested_by" value="" required />
+					<input type="hidden" id="requested_by" class="field_required" name="requested_by" value="" required />
 				</div>
-				
+			
 				<div class="form-group">
-					<label for="department_id_selection">Department</label>
-					<input id="department_id_selection" type="text" class="form-control ajax_searcher" action="transaction_department_id" target="department_id" />
+					<label for="patient_id_selection">For Patient</label>
+					<input id="patient_id_selection" type="text" class="form-control ajax_searcher" action="transaction_patient_id" target="patient_id" />
 					<div class="ajax_container hidden"></div>
 					<div class="ajax_selected_display hidden"></div>
-					<input type="hidden" id="department_id" name="department_id" value="" required />
-				</div>
-				
-				<div class="form-group">
-					<label for="department_head_id_selection">Department Head <i class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="top" title="Department field must be filled first!"></i></label>
-					<input id="department_head_id_selection" type="text" class="form-control ajax_searcher" disabled="disabled" action="transaction_department_head_id" target="department_head_id" />
-					<div class="ajax_container hidden"></div>
-					<div class="ajax_selected_display hidden"></div>
-					<input type="hidden" id="department_head_id" name="department_head_id" value="" required />
+					<input type="hidden" id="patient_id" class="field_required" name="patient_id" value="" required />
 				</div>
 				
 				<div class="form-group">
@@ -222,7 +222,7 @@
 </div>
 
 <script>
-	var isDepartmentPage = true;
+	var isDepartmentPage = false;
 </script>
 
 <?php

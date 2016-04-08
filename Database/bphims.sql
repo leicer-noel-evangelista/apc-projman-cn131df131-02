@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 30, 2016 at 05:32 PM
+-- Generation Time: Apr 06, 2016 at 06:21 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 5.5.30
 
@@ -89,6 +89,7 @@ CREATE TABLE `delivery_equipment` (
   `brand` varchar(255) NOT NULL,
   `warranty` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `location` varchar(255) NOT NULL,
+  `is_given` tinyint(1) NOT NULL DEFAULT '0',
   `is_returned` tinyint(1) NOT NULL DEFAULT '0',
   `is_deleted` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -97,10 +98,10 @@ CREATE TABLE `delivery_equipment` (
 -- Dumping data for table `delivery_equipment`
 --
 
-INSERT INTO `delivery_equipment` (`delivery_equipment_id`, `delivery_id`, `item_id`, `equipment_code`, `brand`, `warranty`, `location`, `is_returned`, `is_deleted`) VALUES
-(1, 2, 21, 'E', 'asd', '2016-03-23 16:00:00', 'sdsd', 0, 0),
-(2, 2, 21, 'EC9', 'Tokyo', '2016-04-29 16:00:00', 'FFFSD', 0, 1),
-(3, 2, 24, 'XXXe', 'YYYe', '2016-03-25 16:00:00', 'EEEEe', 0, 0);
+INSERT INTO `delivery_equipment` (`delivery_equipment_id`, `delivery_id`, `item_id`, `equipment_code`, `brand`, `warranty`, `location`, `is_given`, `is_returned`, `is_deleted`) VALUES
+(1, 2, 21, 'E', 'asd', '2016-03-23 16:00:00', 'sdsd', 1, 0, 0),
+(2, 2, 21, 'EC9', 'Tokyo', '2016-04-29 16:00:00', 'FFFSD', 0, 0, 1),
+(3, 2, 24, 'XXXe', 'YYYe', '2016-03-25 16:00:00', 'EEEEe', 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -131,24 +132,24 @@ CREATE TABLE `delivery_supply` (
 --
 
 INSERT INTO `delivery_supply` (`delivery_supply_id`, `delivery_id`, `item_id`, `batch_code`, `dispense`, `quantity`, `unit_id`, `dosage`, `dosage_unit_id`, `age`, `brand`, `is_restricted`, `expiry`, `location`, `is_deleted`) VALUES
-(1, 1, 1, 'BC000001', 0, 100, 20, 500, 14, '4+', 'Mercury', 0, '2016-03-28 11:43:51', 'Storage A', 0),
-(2, 1, 2, 'BC000001', 0, 199, 20, 200, 14, '8+', 'Mercury', 0, '2016-03-30 11:27:14', 'Storage A', 0),
-(3, 1, 2, 'BC000001', 0, 200, 20, 310, 2, '4+', 'ADC', 0, '2016-03-30 16:00:00', 'S-A', 0),
-(4, 1, 16, '77', 0, 66, 20, 400, 19, '7+', 'Johnson', 1, '2016-04-15 10:10:52', 'SB0', 0),
-(5, 1, 12, '97776', 0, 800, 20, 7, 15, '6', '5', 0, '2016-03-20 02:52:58', '4', 1),
-(6, 1, 15, '11', 0, 22, 4, 33, 3, '44', '55', 0, '2016-03-20 02:53:07', '66', 1),
-(7, 1, 4, 'BC000001', 0, 55, 16, 100, 15, '7+', 'GGH', 0, '2016-03-22 16:00:00', 'SSB', 0),
-(8, 1, 19, '110', 0, 720, 8, 320, 7, '11+', '550', 0, '2016-03-23 16:00:00', '34', 0),
-(9, 1, 19, '110', 0, 220, 8, 330, 7, '6+', '550', 0, '2016-03-23 16:00:00', '660', 0),
-(10, 1, 19, '110', 0, 220, 8, 330, 7, '3+', '550', 0, '2016-03-28 11:44:02', '660', 1),
-(11, 1, 19, '110', 0, 220, 8, 330, 7, '10+', '550', 1, '2016-03-29 08:27:51', '660', 1),
-(12, 1, 12, '9', 0, 800, 8, 7, 15, '6', '5', 0, '2016-03-20 02:53:16', '4', 1),
-(13, 1, 2, '1', 0, 800, 1, 3, 2, '4', '5', 0, '2016-03-20 02:53:12', '7', 1),
-(14, 1, 2, '1', 0, 2000, 1, 3, 2, '4', '5', 0, '2016-03-20 02:52:08', '7', 1),
-(15, 1, 2, '1', 0, 80, 1, 3, 2, '4', '5', 0, '2016-03-20 02:51:32', '7', 1),
-(16, 2, 1, 'BC000002', 0, 155, 21, 57, 13, '13+', 'GGD', 0, '2016-05-11 11:27:52', 'FF', 0),
-(17, 2, 2, 'BC000002', 0, 550, 22, 55, 7, '3+', 'Akola', 0, '2016-03-22 16:00:00', 'DF', 0),
-(18, 2, 3, 'BC000002', 0, 57, 21, 88, 14, '>3', 'KKL', 0, '2016-03-22 16:00:00', 'GG', 0);
+(1, 1, 1, 'BC000001', 100, 100, 20, 500, 14, '4+', 'Mercury', 0, '2016-06-22 16:00:00', 'Storage A', 0),
+(2, 1, 2, 'BC000001', 0, 199, 20, 200, 14, '8+', 'Mercury', 0, '2016-06-22 16:00:00', 'Storage A', 0),
+(3, 1, 2, 'BC000001', 0, 200, 20, 310, 2, '4+', 'ADC', 0, '2016-06-22 16:00:00', 'S-A', 0),
+(4, 1, 16, '77', 0, 66, 20, 400, 19, '7+', 'Johnson', 1, '2016-06-22 16:00:00', 'SB0', 0),
+(5, 1, 12, '97776', 0, 800, 20, 7, 15, '6', '5', 0, '2016-06-22 16:00:00', '4', 1),
+(6, 1, 15, '11', 0, 22, 4, 33, 3, '44', '55', 0, '2016-06-22 16:00:00', '66', 1),
+(7, 1, 4, 'BC000001', 0, 55, 16, 100, 15, '7+', 'GGH', 0, '2016-06-22 16:00:00', 'SSB', 0),
+(8, 1, 19, '110', 0, 720, 8, 320, 7, '11+', '550', 0, '2016-06-22 16:00:00', '34', 0),
+(9, 1, 19, '110', 0, 220, 8, 330, 7, '6+', '550', 0, '2016-06-22 16:00:00', '660', 0),
+(10, 1, 19, '110', 0, 220, 8, 330, 7, '3+', '550', 0, '2016-06-22 16:00:00', '660', 1),
+(11, 1, 19, '110', 0, 220, 8, 330, 7, '10+', '550', 1, '2016-06-22 16:00:00', '660', 1),
+(12, 1, 12, '9', 0, 800, 8, 7, 15, '6', '5', 0, '2016-06-22 16:00:00', '4', 1),
+(13, 1, 2, '1', 800, 800, 1, 3, 2, '4', '5', 0, '2016-06-22 16:00:00', '7', 1),
+(14, 1, 2, '1', 0, 2000, 1, 3, 2, '4', '5', 0, '2016-06-22 16:00:00', '7', 1),
+(15, 1, 2, '1', 0, 80, 1, 3, 2, '4', '5', 0, '2016-06-22 16:00:00', '7', 1),
+(16, 2, 1, 'BC000002', 155, 155, 21, 57, 13, '13+', 'GGD', 0, '2016-06-22 16:00:00', 'FF', 0),
+(17, 2, 2, 'BC000002', 550, 550, 22, 55, 7, '3+', 'Akola', 0, '2016-06-22 16:00:00', 'DF', 0),
+(18, 2, 3, 'BC000002', 0, 57, 21, 88, 14, '>3', 'KKL', 0, '2016-06-22 16:00:00', 'GG', 0);
 
 -- --------------------------------------------------------
 
@@ -402,7 +403,22 @@ CREATE TABLE `transaction` (
 --
 
 INSERT INTO `transaction` (`transaction_id`, `type`, `requested_by`, `department_id`, `department_head_id`, `doctor_id`, `patient_id`, `requested_date`, `remarks`, `image`) VALUES
-(1, 1, 2, 1, 1, 0, 0, '2016-03-22 06:54:02', '', '');
+(1, 1, 2, 1, 1, 0, 0, '2016-03-22 06:54:02', '', ''),
+(2, 1, 1, 1, 13, 0, 0, '2016-04-06 08:29:40', 'asad', ''),
+(3, 1, 1, 1, 16, 0, 0, '2016-04-06 09:03:31', 'Hey', ''),
+(4, 1, 3, 1, 6, 0, 0, '2016-04-06 09:06:03', 'fff', ''),
+(5, 1, 6, 1, 13, 0, 0, '2016-04-06 09:07:16', 'aa', ''),
+(6, 1, 5, 1, 16, 0, 0, '2016-04-06 09:09:45', 'ddd', ''),
+(7, 1, 4, 1, 13, 0, 0, '2016-04-06 09:11:21', 'ddd', ''),
+(8, 1, 1, 1, 6, 0, 0, '2016-04-06 09:11:48', 'ggg', ''),
+(9, 1, 5, 2, 14, 0, 0, '2016-04-06 09:16:16', 'a', ''),
+(10, 1, 1, 1, 13, 0, 0, '2016-04-06 09:57:00', '', ''),
+(11, 2, 3, 0, 0, 8, 1, '2016-04-06 10:39:41', 'dsd', ''),
+(12, 2, 5, 0, 0, 9, 1, '2016-04-06 10:41:10', 'ddddsd', ''),
+(13, 1, 8, 1, 6, 0, 0, '2016-04-06 10:43:14', 'sf', ''),
+(14, 1, 3, 2, 7, 0, 0, '2016-04-06 10:44:17', 'asd', ''),
+(15, 1, 4, 1, 6, 0, 0, '2016-04-06 16:06:44', 'a', ''),
+(16, 1, 1, 1, 6, 0, 0, '2016-04-06 16:16:51', '', '');
 
 -- --------------------------------------------------------
 
@@ -425,7 +441,29 @@ CREATE TABLE `transaction_item` (
 INSERT INTO `transaction_item` (`transaction_item_id`, `transaction_id`, `delivery_item_type`, `delivery_item_id`, `quantity`) VALUES
 (1, 1, 1, 1, 2),
 (2, 1, 1, 2, 4),
-(3, 1, 2, 1, 1);
+(3, 1, 2, 1, 1),
+(4, 2, 1, 14, 10),
+(5, 2, 2, 3, 1),
+(6, 3, 1, 16, 100),
+(7, 3, 2, 1, 1),
+(8, 4, 1, 16, 10),
+(9, 4, 2, 3, 1),
+(10, 4, 2, 1, 1),
+(11, 5, 1, 16, 1),
+(12, 6, 1, 16, 2),
+(13, 7, 1, 16, 10),
+(14, 8, 1, 16, 31),
+(15, 8, 2, 3, 1),
+(16, 9, 1, 16, 1),
+(17, 9, 2, 3, 1),
+(18, 9, 2, 1, 1),
+(19, 11, 1, 1, 90),
+(20, 12, 1, 1, 2),
+(21, 13, 1, 1, 2),
+(22, 13, 1, 17, 460),
+(23, 14, 1, 17, 50),
+(24, 15, 1, 13, 800),
+(25, 16, 1, 17, 40);
 
 -- --------------------------------------------------------
 
@@ -437,6 +475,7 @@ CREATE TABLE `unit` (
   `unit_id` int(10) UNSIGNED NOT NULL,
   `unit` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
+  `type` int(11) NOT NULL DEFAULT '1',
   `description` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -444,29 +483,29 @@ CREATE TABLE `unit` (
 -- Dumping data for table `unit`
 --
 
-INSERT INTO `unit` (`unit_id`, `unit`, `name`, `description`) VALUES
-(1, 'Ci', 'CURIE', ''),
-(2, 'dL', 'DECILITER', ''),
-(3, 'g', 'GRAM', ''),
-(4, 'kg', 'KILOGRAM', ''),
-(5, 'L', 'LITER', ''),
-(6, 'uCi', 'MICROCURIE', ''),
-(7, 'ug', 'MICROGRAM', ''),
-(8, 'uL', 'MICROLITER', ''),
-(9, 'umol', 'MICROMOLE', ''),
-(10, 'um', 'MICRON', ''),
-(11, 'mCi', 'MILLICURIE', ''),
-(12, 'meq', 'MILLIEQUIVALENT', ''),
-(13, 'mg', 'MILLIGRAM', ''),
-(14, 'mL', 'MILLILITER', ''),
-(15, 'mm', 'MILLIMETER', ''),
-(16, 'mmol', 'MILLIMOLE', ''),
-(17, 'ML', 'MOLE', ''),
-(18, 'ng', 'NANOGRAM', ''),
-(19, 'nmol', 'NANOMOLE', ''),
-(20, 'pcs', 'PIECES', ''),
-(21, 'box', 'BOX', ''),
-(22, 'pack', 'PACK', '');
+INSERT INTO `unit` (`unit_id`, `unit`, `name`, `type`, `description`) VALUES
+(1, 'Ci', 'CURIE', 2, ''),
+(2, 'dL', 'DECILITER', 2, ''),
+(3, 'g', 'GRAM', 2, ''),
+(4, 'kg', 'KILOGRAM', 2, ''),
+(5, 'L', 'LITER', 2, ''),
+(6, 'uCi', 'MICROCURIE', 2, ''),
+(7, 'ug', 'MICROGRAM', 2, ''),
+(8, 'uL', 'MICROLITER', 2, ''),
+(9, 'umol', 'MICROMOLE', 2, ''),
+(10, 'um', 'MICRON', 2, ''),
+(11, 'mCi', 'MILLICURIE', 2, ''),
+(12, 'meq', 'MILLIEQUIVALENT', 2, ''),
+(13, 'mg', 'MILLIGRAM', 2, ''),
+(14, 'mL', 'MILLILITER', 2, ''),
+(15, 'mm', 'MILLIMETER', 2, ''),
+(16, 'mmol', 'MILLIMOLE', 2, ''),
+(17, 'ML', 'MOLE', 2, ''),
+(18, 'ng', 'NANOGRAM', 2, ''),
+(19, 'nmol', 'NANOMOLE', 2, ''),
+(20, 'pcs', 'PIECES', 1, ''),
+(21, 'box', 'BOX', 1, ''),
+(22, 'pack', 'PACK', 1, '');
 
 -- --------------------------------------------------------
 
@@ -686,12 +725,12 @@ ALTER TABLE `supplier`
 -- AUTO_INCREMENT for table `transaction`
 --
 ALTER TABLE `transaction`
-  MODIFY `transaction_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `transaction_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT for table `transaction_item`
 --
 ALTER TABLE `transaction_item`
-  MODIFY `transaction_item_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `transaction_item_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT for table `unit`
 --

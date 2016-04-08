@@ -135,7 +135,7 @@ class BPHIMS {
 			UPDATE
 				`delivery`
 			SET
-				`is_deleted`=1
+				`is_deleted` = 1
 			WHERE
 				`delivery_id`='.$delivery_id.'
 		';
@@ -724,18 +724,19 @@ class BPHIMS {
 	/**
 		This method returns all records in item table
 	*/
-	public static function getAllItems() {
+	public static function getAllItems($id) {
 		// Open DB
 		$db = Helper::openDB();
 		
 		// Create Query
 		$sql = "
 			SELECT
-				i.item_id, i.name
+				i.item_id, i.name, i.critical_level
 			FROM
 				`item` i
 			WHERE
-				i.is_deleted=0
+				i.is_deleted=0 AND
+				i.category_id=".$id."
 			ORDER BY
 				i.name ASC
 			";
@@ -754,13 +755,44 @@ class BPHIMS {
 	}
 	
 	/**
+		This method returns all records in item table
+	*/
+	public static function getRemaining($id) {
+		// Open DB
+		$db = Helper::openDB();
+		
+		// Create Query
+		$sql = "
+			SELECT
+				SUM(ds.quantity - ds.dispense) as total
+			FROM
+				`delivery_supply` ds
+			WHERE
+				ds.is_deleted=0 AND
+				ds.item_id=".$id."
+			";
+		//print_r($sql);die();
+		// Query Database
+		$query = mysql_query($sql,$db);
+		
+		// Fetch Details
+		$result = Helper::getRowFromResultQuery($query);
+		
+		// Close DB
+		Helper::closeDB($db);
+		
+		// Return status 
+		return ($result['total'])?$result['total']:0;
+	}
+	
+	/**
 		This method returns all records in item table that is under category of supply
 	*/
 	public static function getAllItemViaCategory($id, $limit, $offset) {
 		// Open DB
 		$db = Helper::openDB();
 		
-		$additional = (($limit!=null)?"LIMIT ".$limit:"").(($offset!=null)?"OFFSET ".$offset:"");
+		$additional = (($limit!=null)?"LIMIT ".$limit:"").(($offset!=null)?" OFFSET ".$offset:"");
 		
 		// Create Query
 		$sql = "
@@ -775,7 +807,7 @@ class BPHIMS {
 				i.item_id ASC
 			".$additional."
 			";
-
+			
 		// Query Database
 		$query = mysql_query($sql,$db);
 		
@@ -989,7 +1021,7 @@ class BPHIMS {
 	/**
 		This method returns all records in unit table
 	*/
-	public static function getAllUnits() {
+	public static function getAllUnits($type) {
 		// Open DB
 		$db = Helper::openDB();
 		
@@ -999,6 +1031,8 @@ class BPHIMS {
 				u.unit_id, u.unit
 			FROM
 				`unit` u
+			WHERE
+				u.type=".$type."
 			ORDER BY
 				u.unit ASC
 			";
@@ -1106,15 +1140,12 @@ class BPHIMS {
 		
 		// Create Query
 		$sql = "
-			SELECT
+			SELECT DISTINCT 
 				t.transaction_id, t.type, t.requested_by, t.requested_date, t.remarks,
-				e.first_name, e.last_name,
-				COUNT(CASE WHEN ti.delivery_item_type=".BPHIMS_ITEM_SUPPLY." THEN 1 END) AS supply_count,
-				COUNT(CASE WHEN ti.delivery_item_type=".BPHIMS_ITEM_EQUIPMENT." THEN 1 END) AS equipment_count
+				e.first_name, e.last_name
 			FROM
 				`transaction` t
 			LEFT JOIN `employee` e ON e.employee_id=t.requested_by
-			INNER JOIN `transaction_item` ti ON ti.transaction_id=t.transaction_id
 			ORDER BY
 				t.requested_date DESC
 			LIMIT ".$limit." OFFSET ".$offset."
@@ -1161,6 +1192,284 @@ class BPHIMS {
 		return $result['total'];	
 	}
 	
+	/**
+		This method returns the total number of records in transaction table
+	*/
+	public static function getAllTransactionItems($id, $type) {
+		// Open DB
+		$db = Helper::openDB();
+		
+		// Create Query
+		$sql = "
+			SELECT
+				ti.*
+			FROM
+				`transaction_item` ti
+			WHERE
+				ti.transaction_id = ".$id." AND
+				ti.	delivery_item_type = ".$type."
+			";
+			
+		// Query Database
+		$query = mysql_query($sql,$db);
+		
+		// Fetch Details
+		$result = Helper::getListFromResultQuery($query);
+		
+		// Close DB
+		Helper::closeDB($db);
+		
+		// Return status 
+		return $result;	
+	}
+	
+	/**
+		Create transaction for department
+	*/
+	public static function createTransactionDepartment($data) {
+		// Open DB
+		$db = Helper::openDB();
+		$transaction_id = 0;
+		try {
+			// Begin transaction
+			mysql_query("BEGIN");
+			
+			// Create Query
+			$type = mysql_real_escape_string($data['type']);
+			$requested_by = mysql_real_escape_string($data['requested_by']);
+			$department_id = mysql_real_escape_string($data['department_id']);
+			$department_head_id = mysql_real_escape_string($data['department_head_id']);
+			$remarks = mysql_real_escape_string($data['remarks']);
+			
+			$sql = '
+				INSERT
+				INTO
+					`transaction`
+					(
+						`type`,
+						`requested_by`,
+						`department_id`,
+						`department_head_id`,
+						`remarks`
+					)
+				VALUES
+					(
+						"'.$type.'",
+						"'.$requested_by.'",
+						"'.$department_id.'",
+						"'.$department_head_id.'",
+						"'.$remarks.'"
+					)
+			';
+			
+			// Query Database
+			$insert = mysql_query($sql,$db);
+			$transaction_id = mysql_insert_id();
+			
+			// Insert Transaction Item Supply
+			$delivery_supply_id = $data['delivery_supply_id'];
+			$delivery_supply_quantity = $data['delivery_supply_quantity'];
+			SELF::processTransactionItem($db, $transaction_id, $delivery_supply_id, $delivery_supply_quantity, BPHIMS_ITEM_SUPPLY);
+			
+			// Insert Transaction Item Equipment
+			$delivery_equipment_id = $data['delivery_equipment_id'];
+			$delivery_equipment_quantity = $data['delivery_equipment_quantity'];
+			SELF::processTransactionItem($db, $transaction_id, $delivery_equipment_id, $delivery_equipment_quantity, BPHIMS_ITEM_EQUIPMENT);
+			
+			Helper::createMessage(SYS_SUCCESS,"Successfully create transaction for department!");
+			mysql_query("COMMIT");
+		} catch (Exception $e) {
+			$transaction_id = 0;
+			Helper::createMessage(SYS_ERROR,"Failed to create a transaction for department!");
+			mysql_query("ROLLBACK");
+		}
+		
+		// Close DB
+		Helper::closeDB($db);
+		
+		if($transaction_id != 0) {
+			// Update Item Supply
+			foreach($delivery_supply_id as $id){
+				SELF::updateDeliveryItemSupplyQuantity($id);
+			}
+			// Update Item Equipment
+			foreach($delivery_equipment_id as $id){
+				SELF::updateDeliveryItemEquipmentGiven($id);
+			}
+		}
+		
+		return $transaction_id;
+	}
+	
+	/**
+		Create transaction for doctor
+	*/
+	public static function createTransactionDoctor($data) {
+		// Open DB
+		$db = Helper::openDB();
+		$transaction_id = 0;
+		try {
+			// Begin transaction
+			mysql_query("BEGIN");
+			
+			// Create Query
+			$type = mysql_real_escape_string($data['type']);
+			$doctor_id = mysql_real_escape_string($data['doctor_id']);
+			$requested_by = mysql_real_escape_string($data['requested_by']);
+			$patient_id = mysql_real_escape_string($data['patient_id']);
+			$remarks = mysql_real_escape_string($data['remarks']);
+			
+			$sql = '
+				INSERT
+				INTO
+					`transaction`
+					(
+						`type`,
+						`doctor_id`,
+						`requested_by`,
+						`patient_id`,
+						`remarks`
+					)
+				VALUES
+					(
+						"'.$type.'",
+						"'.$doctor_id.'",
+						"'.$requested_by.'",
+						"'.$patient_id.'",
+						"'.$remarks.'"
+					)
+			';
+			
+			// Query Database
+			$insert = mysql_query($sql,$db);
+			$transaction_id = mysql_insert_id();
+			
+			// Insert Transaction Item Supply
+			$delivery_supply_id = $data['delivery_supply_id'];
+			$delivery_supply_quantity = $data['delivery_supply_quantity'];
+			SELF::processTransactionItem($db, $transaction_id, $delivery_supply_id, $delivery_supply_quantity, BPHIMS_ITEM_SUPPLY);
+			
+			// Insert Transaction Item Equipment
+			$delivery_equipment_id = $data['delivery_equipment_id'];
+			$delivery_equipment_quantity = $data['delivery_equipment_quantity'];
+			SELF::processTransactionItem($db, $transaction_id, $delivery_equipment_id, $delivery_equipment_quantity, BPHIMS_ITEM_EQUIPMENT);
+			
+			Helper::createMessage(SYS_SUCCESS,"Successfully create transaction for doctor!");
+			mysql_query("COMMIT");
+		} catch (Exception $e) {
+			$transaction_id = 0;
+			Helper::createMessage(SYS_ERROR,"Failed to create a transaction for doctor!");
+			mysql_query("ROLLBACK");
+		}
+		
+		// Close DB
+		Helper::closeDB($db);
+		
+		if($transaction_id != 0) {
+			// Update Item Supply
+			foreach($delivery_supply_id as $id){
+				SELF::updateDeliveryItemSupplyQuantity($id);
+			}
+			// Update Item Equipment
+			foreach($delivery_equipment_id as $id){
+				SELF::updateDeliveryItemEquipmentGiven($id);
+			}
+		}
+		
+		return $transaction_id;
+	}
+	
+	/**
+		Private function that process the transaction items
+	*/
+	private static function processTransactionItem($db, $transaction_id, $items, $quantities, $type) {
+		foreach($items as $key => $delivery_item_id) {
+			$sql = '
+				INSERT
+				INTO
+					`transaction_item`
+					(
+						`transaction_id`,
+						`delivery_item_type`,
+						`delivery_item_id`,
+						`quantity`
+					)
+				VALUES
+					(
+						"'.$transaction_id.'",
+						"'.$type.'",
+						"'.$delivery_item_id.'",
+						"'.$quantities[$key].'"
+					)
+			';
+			mysql_query($sql,$db);
+		}
+	}
+	
+	/**
+		Update Delivery Item Supply upon transaction
+	*/
+	public static function updateDeliveryItemSupplyQuantity($id) {
+		// Open DB
+		$db = Helper::openDB();
+		
+		// Get total of dispense supply
+		$sql = "
+			SELECT
+				SUM(ti.quantity) as total
+			FROM
+				`transaction_item` ti
+			WHERE
+				ti.delivery_item_id=".$id."
+			";
+			
+		// Query Database
+		$query = mysql_query($sql,$db);
+		
+		// Fetch Details
+		$result = Helper::getRowFromResultQuery($query);	
+		
+		// Update delivery supply item
+		$sql = '
+			UPDATE
+				`delivery_supply`
+			SET
+				`dispense`="'.$result['total'].'"
+			WHERE
+				`delivery_supply_id`='.$id.'
+		';
+		
+		// Query Database
+		mysql_query($sql,$db);
+		
+		// Close DB
+		Helper::closeDB($db);
+	}
+	
+	/**
+		Update Delivery Item Equipment upon transaction
+	*/
+	public static function updateDeliveryItemEquipmentGiven($id) {
+		// Open DB
+		$db = Helper::openDB();
+		
+		// Update delivery supply item
+		$sql = '
+			UPDATE
+				`delivery_equipment`
+			SET
+				`is_given`=1
+			WHERE
+				`delivery_equipment_id`='.$id.'
+		';
+		
+		// Query Database
+		mysql_query($sql,$db);
+		
+		// Close DB
+		Helper::closeDB($db);
+	}
+	
 	############################################################
 	#                                                          #
 	#	AJAX REQUEST                                           #
@@ -1188,6 +1497,84 @@ class BPHIMS {
 				e.last_name LIKE '%".$data['keyword']."%' OR
 				CONCAT(e.first_name,' ', e.last_name) LIKE '%".$data['keyword']."%' OR
 				CONCAT(e.last_name,', ', e.first_name) LIKE '%".$data['keyword']."%'
+			LIMIT ".$data['limit']."
+			";
+			
+		// Query Database
+		$query = mysql_query($sql,$db);
+		
+		// Fetch Details
+		$result = Helper::getListFromResultQuery($query);
+		
+		// Close DB
+		Helper::closeDB($db);
+		
+		// Return status 
+		return $result;
+	}
+	
+	/**
+		AJAX request for users in specified position
+	*/
+	public static function getUsersInPositionViaAjax($data) {
+		// Open DB
+		$db = Helper::openDB();
+		
+		// Create Query
+		$sql = "
+			SELECT
+				e.employee_id, e.first_name, e.last_name,
+				p.title AS position_title
+			FROM
+				`employee` e
+			LEFT JOIN `position` p ON p.position_id=e.position_id 
+			WHERE
+				(
+					e.employee_id LIKE '%".$data['keyword']."%' OR
+					e.first_name LIKE '%".$data['keyword']."%' OR
+					e.last_name LIKE '%".$data['keyword']."%' OR
+					CONCAT(e.first_name,' ', e.last_name) LIKE '%".$data['keyword']."%' OR
+					CONCAT(e.last_name,', ', e.first_name) LIKE '%".$data['keyword']."%'
+				)
+				AND
+				(
+					e.position_id = ".$data['position_id']."
+				)
+			LIMIT ".$data['limit']."
+			";
+			
+		// Query Database
+		$query = mysql_query($sql,$db);
+		
+		// Fetch Details
+		$result = Helper::getListFromResultQuery($query);
+		
+		// Close DB
+		Helper::closeDB($db);
+		
+		// Return status 
+		return $result;
+	}
+	
+	/**
+		AJAX request for users
+	*/
+	public static function getPatientsViaAjax($data) {
+		// Open DB
+		$db = Helper::openDB();
+		
+		// Create Query
+		$sql = "
+			SELECT
+				p.patient_id, p.first_name, p.last_name
+			FROM
+				`patient` p
+			WHERE
+				p.patient_id LIKE '%".$data['keyword']."%' OR
+				p.first_name LIKE '%".$data['keyword']."%' OR
+				p.last_name LIKE '%".$data['keyword']."%' OR
+				CONCAT(p.first_name,' ', p.last_name) LIKE '%".$data['keyword']."%' OR
+				CONCAT(p.last_name,', ', p.first_name) LIKE '%".$data['keyword']."%'
 			LIMIT ".$data['limit']."
 			";
 			
@@ -1285,14 +1672,18 @@ class BPHIMS {
 		return $result;
 	}
 	
-	
-	
 	/**
-		AJAX request for departments
+		AJAX request for delivery supply item
 	*/
 	public static function getItemSupplyViaAjax($data) {
 		// Open DB
 		$db = Helper::openDB();
+		
+		if(count($data['selected_id']) > 0) {
+			$notInQuery = "AND (ds.delivery_supply_id NOT IN(".implode(', ', $data['selected_id'])."))";
+		} else {
+			$notInQuery = "";
+		}
 		
 		// Create Query
 		$sql = "
@@ -1313,8 +1704,61 @@ class BPHIMS {
 				)
 				AND
 				(
-					ds.expiry >= DATE_ADD(CURDATE(), INTERVAL +1 DAY)
+					ds.expiry >= DATE_ADD(CURDATE(), INTERVAL +1 DAY) AND
+					ds.dispense < ds.quantity AND
+					ds.is_deleted = 0
 				)
+				".$notInQuery."
+			ORDER BY i.name, ds.expiry
+			LIMIT ".$data['limit']."
+			";
+			
+		// Query Database
+		$query = mysql_query($sql,$db);
+		
+		// Fetch Details
+		$result = Helper::getListFromResultQuery($query);
+		
+		// Close DB
+		Helper::closeDB($db);
+		
+		// Return status 
+		return $result;
+	}
+	
+	/**
+		AJAX request for delivery equipment item
+	*/
+	public static function getItemEquipmentViaAjax($data) {
+		// Open DB
+		$db = Helper::openDB();
+		
+		if(count($data['selected_id']) > 0) {
+			$notInQuery = "AND (de.delivery_equipment_id NOT IN(".implode(', ', $data['selected_id'])."))";
+		} else {
+			$notInQuery = "";
+		}
+		
+		// Create Query
+		$sql = "
+			SELECT
+				i.item_id, i.name, i.code,
+				de.delivery_equipment_id, de.equipment_code, de.brand, de.warranty, de.location
+			FROM
+				`delivery_equipment` de
+			LEFT JOIN `item` i ON i.item_id = de.item_id
+			WHERE
+				(
+					de.is_given <> 1 AND
+					de.is_deleted <> 1
+				)
+				AND
+				(
+					i.name LIKE '%".$data['keyword']."%' OR
+					i.code LIKE '%".$data['keyword']."%'
+				)
+				".$notInQuery."
+			ORDER BY i.name
 			LIMIT ".$data['limit']."
 			";
 			

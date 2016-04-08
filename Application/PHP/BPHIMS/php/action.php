@@ -117,5 +117,21 @@ if(isset($_REQUEST['action']) && !empty($_REQUEST['action'])) {
 		Helper::redirect("../".$_REQUEST['return_page'].".php");
 	}
 	
+	/**
+		Create transaction for department
+	*/
+	if($_REQUEST['action'] === "transactions_department_create") {
+		BPHIMS::createTransactionDepartment($_REQUEST);
+		Helper::redirect("../transactions.php");
+	}
+	
+	/**
+		Create transaction for doctor
+	*/
+	if($_REQUEST['action'] === "transactions_doctor_create") {
+		BPHIMS::createTransactionDoctor($_REQUEST);
+		Helper::redirect("../transactions.php");
+	}
+	
 }
 ?>

@@ -104,6 +104,18 @@ class Helper {
 			return 'EXPIRED';
 		}
 	}
+	
+	public static function addNoResultFound($formatted, $keyword) {	
+		if(count($formatted) == 0) {
+			$f = '
+				<div class="ajax_result_no_result">
+					<i class="glyphicon glyphicon-exclamation-sign"></i> <b>No result found for keyword "'.$keyword.'"</b>
+				</div>
+			';
+			array_push($formatted, $f);
+		}
+		return $formatted;
+	}
 }
 
 ?>

@@ -35,6 +35,86 @@ if(isset($_REQUEST['action']) && !empty($_REQUEST['action'])) {
 			$first = false;
 			array_push($formatted, $f);
 		}
+		
+		$formatted = Helper::addNoResultFound($formatted, $_REQUEST['keyword']);
+		
+		echo json_encode($formatted);
+	}
+	
+	/**
+		Returns all requestor
+	*/
+	if($_REQUEST['action'] === "transaction_patient_id") {
+		$data = array(
+			"keyword" => $_REQUEST['keyword'],
+			"limit" => 5,
+		);
+		
+		$result = BPHIMS::getPatientsViaAjax($data);
+		$formatted = array();
+		
+		$first = true;
+		foreach($result as $r){
+			$f = '
+				<div class="ajax_result '.(($first)?'initial_selected first_result':'').'" value="'.$r['patient_id'].'">
+					<table>
+						<tr>
+							<td>
+								<img src="img/default/default-avatar.png" class="img-thumbnail" />
+							</td>
+							<td>
+								<b>'.$r['last_name'].', '.$r['first_name'].'</b><br/>
+								<span>#'.Helper::formatID($r['patient_id']).'</span>
+							</td>
+						</tr>
+					</table>
+				</div>
+			';
+			$first = false;
+			array_push($formatted, $f);
+		}
+		
+		$formatted = Helper::addNoResultFound($formatted, $_REQUEST['keyword']);
+		
+		echo json_encode($formatted);
+	}
+	
+	/**
+		Returns all requestor
+	*/
+	if($_REQUEST['action'] === "transaction_doctor_id") {
+		$data = array(
+			"keyword" => $_REQUEST['keyword'],
+			"position_id" => BPHIMS_POSITION_DOCTOR,
+			"limit" => 5,
+		);
+		
+		$result = BPHIMS::getUsersInPositionViaAjax($data);
+		$formatted = array();
+		
+		$first = true;
+		foreach($result as $r){
+			$f = '
+				<div class="ajax_result '.(($first)?'initial_selected first_result':'').'" value="'.$r['employee_id'].'">
+					<table>
+						<tr>
+							<td>
+								<img src="img/default/default-avatar.png" class="img-thumbnail" />
+							</td>
+							<td>
+								<b>'.$r['last_name'].', '.$r['first_name'].'</b><br/>
+								<span>#'.Helper::formatID($r['employee_id']).' - '.$r['position_title'].'</span>
+							</td>
+						</tr>
+					</table>
+				</div>
+			';
+			$first = false;
+			array_push($formatted, $f);
+		}
+		
+		$formatted = Helper::addNoResultFound($formatted, $_REQUEST['keyword']);
+		
 		echo json_encode($formatted);
 	}
 	
@@ -70,6 +150,9 @@ if(isset($_REQUEST['action']) && !empty($_REQUEST['action'])) {
 			$first = false;
 			array_push($formatted, $f);
 		}
+		
+		$formatted = Helper::addNoResultFound($formatted, $_REQUEST['keyword']);
+		
 		echo json_encode($formatted);
 	}
 	
@@ -106,6 +189,9 @@ if(isset($_REQUEST['action']) && !empty($_REQUEST['action'])) {
 			$first = false;
 			array_push($formatted, $f);
 		}
+		
+		$formatted = Helper::addNoResultFound($formatted, $_REQUEST['keyword']);
+		
 		echo json_encode($formatted);
 	}
 	
@@ -116,6 +202,7 @@ if(isset($_REQUEST['action']) && !empty($_REQUEST['action'])) {
 		$data = array(
 			"keyword" => $_REQUEST['keyword'],
 			"limit" => 5,
+			"selected_id" => json_decode($_REQUEST['delivery_item_id'])
 		);
 		
 		$result = BPHIMS::getItemSupplyViaAjax($data);
@@ -135,7 +222,7 @@ if(isset($_REQUEST['action']) && !empty($_REQUEST['action'])) {
 								<b>'.$r['code'].' - '.$r['name'].' ('.$r['brand'].') - '.$r['dosage'].' '.$r['dosage_unit'].'</b><br/>
 								<span><i class="glyphicon glyphicon-tag"></i> '.$r['batch_code'].'</span><br/>
 								<span><i class="glyphicon glyphicon-calendar"></i> '.Helper::formatDate($r['expiry']).' ('.Helper::daysLeft($r['expiry']).')</span><br/>
-								<span><i class="glyphicon glyphicon-shopping-cart"></i> '.$r['quantity'].' pcs</span>
+								<span><i class="glyphicon glyphicon-shopping-cart"></i> '.($r['quantity'] - $r['dispense']).' pcs</span>
 							</td>
 						</tr>
 					</table>
@@ -149,6 +236,54 @@ if(isset($_REQUEST['action']) && !empty($_REQUEST['action'])) {
 			$first = false;
 			array_push($formatted, $f);
 		}
+		
+		$formatted = Helper::addNoResultFound($formatted, $_REQUEST['keyword']);
+		
+		echo json_encode($formatted);
+	}
+	
+	/**
+		Returns all item supply
+	*/
+	if($_REQUEST['action'] === "transaction_item_equipment_id") {
+		$data = array(
+			"keyword" => $_REQUEST['keyword'],
+			"limit" => 5,
+			"selected_id" => json_decode($_REQUEST['delivery_equipment_id'])
+		);
+		
+		$result = BPHIMS::getItemEquipmentViaAjax($data);
+		$formatted = array();
+		
+		$first = true;
+		foreach($result as $r){
+			$r['quantity'] = 1;
+			$r['dispense'] = 0;
+			$f = '
+				<div class="ajax_result special_result '.(($first)?'initial_selected first_result':'').'">
+					<table class="ajax_table">
+						<tr>
+							<td>
+								<img src="img/default/default_equipment.png" class="img-thumbnail" />
+							</td>
+							<td>
+								<b>'.$r['code'].' - '.$r['name'].' ('.$r['brand'].')</b><br/>
+								<span><i class="glyphicon glyphicon-tag"></i> '.$r['equipment_code'].'</span><br/>
+								<span><i class="glyphicon glyphicon-calendar"></i> '.Helper::formatDate($r['warranty']).' ('.Helper::daysLeft($r['warranty']).')</span>
+							</td>
+						</tr>
+					</table>
+					
+					<div class="ajax_label label_location">Loc: '.$r['location'].'</div>
+					<textarea class="hidden" id="ajax_result_data">'.json_encode($r).'</textarea>
+				</div>
+			';
+			$first = false;
+			array_push($formatted, $f);
+		}
+		
+		$formatted = Helper::addNoResultFound($formatted, $_REQUEST['keyword']);
+		
 		echo json_encode($formatted);
 	}
 	

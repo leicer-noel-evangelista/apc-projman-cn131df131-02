@@ -69,6 +69,24 @@ $(document).ready(function(){
 				parameters.department_id = $('#department_id').val();
 			}
 			
+			if($(this).attr('id') == 'item_supply_id_selection') {
+				var selected_id = [];
+				$('.selected_supply_container .selected_delivery_item_id').each(function(i,v){
+					selected_id[i] = $(v).val();
+				});
+				parameters.delivery_item_id = JSON.stringify(selected_id);
+			}
+			
+			if($(this).attr('id') == 'item_equipment_id_selection') {
+				var selected_id = [];
+				$('.selected_equipment_container .selected_delivery_item_id').each(function(i,v){
+					selected_id[i] = $(v).val();
+				});
+				parameters.delivery_equipment_id = JSON.stringify(selected_id);
+			}
+			
+			console.log(parameters);
+			
 			callAJAX($(this), parameters);
 		}
 	});
@@ -81,8 +99,10 @@ $(document).ready(function(){
 			// Process special result.
 			var process = true;
 			
-			if($(this).attr('restricted')==1) {
-				process = false;
+			if(isDepartmentPage) {
+				if($(this).attr('restricted')==1) {
+					process = false;
+				}
 			}
 			
 			if(process) {
@@ -113,9 +133,9 @@ $(document).ready(function(){
 		$(this).parent().parent().children('.form-control').removeClass('hidden'); // show input
 		
 		if($(this).hasClass('result_special')) {
-			$(this).parent().parent().parent().find('#item_supply_quantity').html('').append('<option value="0">0</option>').attr('disabled','disabled');
-			$(this).parent().parent().parent().find('#item_supply_add').attr('disabled','disabled').addClass('btn-default').removeClass('btn-success');
-			$(this).parent().parent().children('#item_supply_data').text('');
+			$(this).parent().parent().parent().find('.select_item_quantity').html('').append('<option value="0">0</option>').attr('disabled','disabled');
+			$(this).parent().parent().parent().find('.button_item_add').attr('disabled','disabled').addClass('btn-default').removeClass('btn-success');
+			$(this).parent().parent().children('.item_data').text('');
 		}
 		
 		$(this).parent().empty(); // clear parent
@@ -175,7 +195,7 @@ $(document).ready(function(){
 		element.parent().parent().children('.ajax_selected_display').append(element.find('b')); // append name
 		element.parent().parent().children('.ajax_selected_display').append(' '); // add space
 		element.parent().parent().children('.ajax_selected_display').append(element.find('span')); // add employee_id and position
-		element.parent().parent().children('.ajax_selected_display').append('<i class="remove_selected_result glyphicon glyphicon-remove pull-right"></i>'); // add employee_id and position
+		element.parent().parent().children('.ajax_selected_display').append('<i class="remove_selected_result glyphicon glyphicon-remove pull-right"></i>'); 
 		element.parent().parent().children('.ajax_selected_display').removeClass('hidden'); // display ajax_container
 		element.parent().parent().children('.form-control').val(''); // clear value
 		var target = element.parent().parent().children('.form-control').attr('target');
@@ -191,7 +211,7 @@ $(document).ready(function(){
 		element.parent().parent().children('.ajax_selected_display').empty(); // clear
 		element.parent().parent().children('.ajax_selected_display').append(element.find('img')); // append image
 		element.parent().parent().children('.ajax_selected_display').append(element.find('b')); // append name
-		element.parent().parent().children('.ajax_selected_display').append('<i class="remove_selected_result result_special glyphicon glyphicon-remove pull-right"></i>'); // add employee_id and position
+		element.parent().parent().children('.ajax_selected_display').append('<i class="remove_selected_result result_special glyphicon glyphicon-remove pull-right"></i>');
 		element.parent().parent().children('.ajax_selected_display').removeClass('hidden'); // display ajax_container
 		element.parent().parent().children('.form-control').val(''); // clear value
 		var target = element.parent().parent().children('.form-control').attr('target');
@@ -199,17 +219,19 @@ $(document).ready(function(){
 		
 		// something
 		var data_json = element.children('#ajax_result_data').val();
-		element.parent().parent().children('#item_supply_data').text(data_json); // specify value
+		element.parent().parent().children('.item_data').text(data_json); // specify value
 		var data = JSON.parse(data_json);
 		
-		element.parent().parent().parent().find('#item_supply_quantity').html('');
+		element.parent().parent().parent().find('.select_item_quantity').html('');
 		
-		for(var i=1; i <= parseInt(data.quantity,10); i++) {
-			var selected = (i == parseInt(data.quantity,10))?'selected="selected"':'';
-			element.parent().parent().parent().find('#item_supply_quantity').append('<option value="'+i+'" '+selected+'>'+i+' pcs.</option>');
+		var totalQuantity = parseInt(data.quantity,10) - parseInt(data.dispense,10);
+		
+		for(var i=1; i <= totalQuantity; i++) {
+			var selected = (i == totalQuantity)?'selected="selected"':'';
+			element.parent().parent().parent().find('.select_item_quantity').append('<option value="'+i+'" '+selected+'>'+i+' pcs.</option>');
 		}
-		element.parent().parent().parent().find('#item_supply_quantity').removeAttr('disabled');
-		element.parent().parent().parent().find('#item_supply_add').removeAttr('disabled').removeClass('btn-default').addClass('btn-success');
+		element.parent().parent().parent().find('.select_item_quantity').removeAttr('disabled');
+		element.parent().parent().parent().find('.button_item_add').removeAttr('disabled').removeClass('btn-default').addClass('btn-success');
 	}
 
 	/**
@@ -222,18 +244,103 @@ $(document).ready(function(){
 		hideAjaxResult = true;
 	});
 	
+	/**
+		Adding selected supply
+	*/
 	$('#item_supply_add').on('click', function(){
+		var numberOfSelected = $('.selected_supply_container').find('tbody.table_body').children('tr.selected').length;
+		var selectedQuantity = $(this).parent().parent().find('#item_supply_quantity').val();
 		var data = JSON.parse($(this).parent().parent().find('#item_supply_data').text()); // parse the data
+		
 		var clone = $('.selected_supply_container').find('tr.clone.hidden').clone(); // clone it so we can specify the details
-		clone.find('td.counter').append($('.selected_supply_container').find('tbody.table_body').children('tr.selected').length + 1); // add item counter
+		clone.find('td.counter').append(numberOfSelected + 1); // add item counter
 		clone.find('b.details_name').append(data.code+' - '+data.name+' ('+data.brand+') - '+data.dosage+' '+data.dosage_unit); // add name
 		clone.find('span.details_batch_code').append(' '+data.batch_code); // add batch_code
 		clone.find('span.details_expiry').append(' '+data.expiry); // add expiry
 		clone.find('span.details_location').append(' '+data.location); // add location
-		clone.find('td.quantity').append('x'+$(this).parent().parent().find('#item_supply_quantity').val()); // get quantity and add it
+		clone.find('td.quantity').append('x'+selectedQuantity); // get quantity and add it
+		
+		clone.find('input.input_delivery_item_id').attr('name', 'delivery_supply_id['+numberOfSelected+']').val(data.delivery_supply_id).addClass('selected_delivery_item_id');
+		clone.find('input.input_quantity').attr('name', 'delivery_supply_quantity['+numberOfSelected+']').val(selectedQuantity);
+		
 		clone.removeClass('clone').removeClass('hidden').addClass('selected'); // remove clone and hidden; add selected
 		$('.selected_supply_container').find('tbody.table_body').append(clone); // add clone
 		$(this).parent().parent().find('.remove_selected_result').click(); // trigger remove
+	});
+	
+	/**
+		Adding selected equipment
+	*/
+	$('#item_equipment_add').on('click', function(){
+		var numberOfSelected = $('.selected_equipment_container').find('tbody.table_body').children('tr.selected').length;
+		var selectedQuantity = $(this).parent().parent().find('.select_item_quantity').val();
+		var data = JSON.parse($(this).parent().parent().find('.item_data').text()); // parse the data
+		
+		var clone = $('.selected_equipment_container').find('tr.clone.hidden').clone(); // clone it so we can specify the details
+		clone.find('td.counter').append(numberOfSelected + 1); // add item counter
+		clone.find('b.details_name').append(data.code+' - '+data.name+' ('+data.brand+')'); // add name
+		clone.find('span.details_batch_code').append(' '+data.equipment_code); // add equipment_code
+		clone.find('span.details_expiry').append(' '+data.warranty); // add warranty
+		clone.find('span.details_location').append(' '+data.location); // add location
+		clone.find('td.quantity').append('x'+selectedQuantity); // get quantity and add it
+		
+		clone.find('input.input_delivery_item_id').attr('name', 'delivery_equipment_id['+numberOfSelected+']').val(data.delivery_equipment_id).addClass('selected_delivery_item_id');
+		clone.find('input.input_quantity').attr('name', 'delivery_equipment_quantity['+numberOfSelected+']').val(selectedQuantity);
+		
+		clone.removeClass('clone').removeClass('hidden').addClass('selected'); // remove clone and hidden; add selected
+		$('.selected_equipment_container').find('tbody.table_body').append(clone); // add clone
+		$(this).parent().parent().find('.remove_selected_result').click(); // trigger remove
+	});
+	
+	/**
+		Remove selected item
+	*/
+	$('.selected_supply_container').on('click', '.remove_selected_item', function(){
+		$(this).parent().parent().remove();
+	});
+	
+	/**
+		Remove selected item
+	*/
+	$('.selected_equipment_container').on('click', '.remove_selected_item', function(){
+		$(this).parent().parent().remove();
+	});
+	
+	/**
+		Submit the form with validation
+	*/
+	$('#button_submit').on('click', function(){
+		var message = [];
+		var isValid = true;
+		
+		$('.field_required').each(function() {
+			if ($(this).val() == "" || $(this).val() == 0) {
+				isValid = false;
+			}
+		});
+		
+		if(isValid) {
+			$('.final_confirmation').removeClass('hidden');
+			$(this).addClass('hidden');
+			$("html, body").animate({ scrollTop: $(document).height() }, 1000);
+		} else {
+			alert("Please complete the form");
+		}
+	});
+	
+	/**
+		Cancel submit
+	*/
+	$('#button_submit_proceed').on('click', function(){
+		$('#form_create').submit();
+	});
+	
+	/**
+		Final confirmation and submit
+	*/
+	$('#button_submit_cancel').on('click', function(){
+		$('#button_submit').removeClass('hidden');
+		$('.final_confirmation').addClass('hidden');
 	});
 	
 });

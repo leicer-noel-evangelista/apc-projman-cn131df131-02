@@ -1,4 +1,9 @@
-<?php include("header.php"); ?>
+<?php 
+$active = "home";
+include("header.php");
+
+?>
+
 <div class="container-fluid">
 	<div class="row">
 		<div class="span12">
@@ -23,4 +28,5 @@ The City of Biliran through a God centered leadership will emerge as the primary
 		</div>
 	</div>
 </div>
-<?php include("footer.php"); ?>
+<?php 
+include("footer.php"); ?>
