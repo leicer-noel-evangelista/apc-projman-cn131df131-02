@@ -85,13 +85,15 @@
 						<label for="amount">Amount</label>
 						<input type="text" class="form-control" id="amount" name="amount" value="<?php echo $info['amount']; ?>" required />
 					</div>
+					<!--
 					<div class="form-group">
 						<label for="is_consignment">Is Consignment</label>
 						<select  class="form-control" id="is_consignment" name="is_consignment" required>
 							<option value="0" <?php echo (($info['is_consignment']==0)?'selected="selected"':'')?>>No</option>
 							<option value="1" <?php echo (($info['is_consignment']==1)?'selected="selected"':'')?>>Yes</option>
 						</select>
-					</div>
+					</div> -->
+
 					<div class="form-group">
 						<label for="remarks">Remarks</label>
 						<textarea class="form-control default-textarea" id="remarks" name="remarks"><?php echo $info['remarks']; ?></textarea>

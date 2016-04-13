@@ -1,8 +1,5 @@
 <?php
-include("header.php");
-
-session_destroy();
-Helper::redirect("index.php");
-
-include("footer.php");
+	include('php/init.php');
+	session_destroy();
+	Helper::redirect("index.php");
 ?>

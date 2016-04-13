@@ -73,7 +73,7 @@
 				<th class="td2">Type</th>
 				<th class="td3">Requested By</th>
 				<th class="td4">Requested Date</th>
-				<th class="td5">Supply</th>
+				<th class="td5">Medicine</th>
 				<th class="td6">Equipment</th>
 				<th>Action</th>
 			</thead>
@@ -98,7 +98,7 @@
 								<td class="td6">'.count(BPHIMS::getAllTransactionItems($transaction['transaction_id'], BPHIMS_ITEM_EQUIPMENT)).'</td>
 								<td>
 									<button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-delete" data-delete-name="'.$dataDeleteName.'" data-delete-id="'.$transaction['transaction_id'].'"><i class="glyphicon glyphicon-trash"></i></button>
-									<a class="btn btn-xs btn-success" href="deliveries_update.php?transaction_id='.$transaction['transaction_id'].'" data-toggle="tooltip" data-placement="top" title="View / Update"><i class="glyphicon glyphicon-edit"></i></a>
+									<a class="btn btn-xs btn-success" href="transactions_view.php?transaction_id='.$transaction['transaction_id'].'" data-toggle="tooltip" data-placement="top" title="View"><i class="glyphicon glyphicon-edit"></i></a>
 								</td>
 							</tr>
 						';
@@ -129,15 +129,15 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title">Delete Delivery Record</h4>
+				<h4 class="modal-title">Delete Transaction Record</h4>
 			</div>
 			<div class="modal-body">
-				<p>Are you sure you want to delete record <b id="delete-name"></b>?</p>
+				<p>Deleting this record will also delete the items requested under this transaction. Are you sure you want to delete record <b id="delete-name"></b>?</p>
 			</div>
 			<div class="modal-footer">
 				<form action="php/action.php" method="post">
-					<input type="hidden" name="action" value="delivery_delete" />
-					<input type="hidden" name="delivery_id" id="delete-id" />
+					<input type="hidden" name="action" value="transaction_delete" />
+					<input type="hidden" name="transaction_id" id="delete-id" />
 					<button type="button" class="btn btn-primary" data-dismiss="modal"><i class="glyphicon glyphicon-remove"></i> Cancel</button>
 					<button type="submit" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Delete</button>
 				</form>

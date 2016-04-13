@@ -14,7 +14,7 @@
 	
 		<div class="pull-left">
 			<h4>View Delivery Supply <small>#<?php echo Helper::formatID($id); ?></small></h4>
-			<p>This page contains the list of supply for the current delivery record</p>
+			<p>This page contains the list of supply for the current delivery supply</p>
 		</div>
 		
 		<div class="pull-right">
@@ -101,10 +101,10 @@
 		<hr/>
 		<div class="pull-left">
 			<h4>Delivery Supply</h4>
-			<p>List of supply in the delivery</p>
+			<p>List of Supply in the delivery</p>
 		</div>
 		<div class="pull-right">
-			<a class="btn btn-primary" href="deliveries_supply_add.php?delivery_id=<?php echo $id; ?>"><i class="glyphicon glyphicon-plus"></i> Add Delivery Supply</a>
+			<a class="btn btn-primary" href="deliveries_supply_add.php?delivery_id=<?php echo $id; ?>"><i class="glyphicon glyphicon-plus"></i> Add Delivery Medicine</a>
 			<br/>
 			<div class="checkbox pull-right">
 				<label><input type="checkbox" id="delivery-supply-option" value="delivery-supply-information"> Show Options</label>

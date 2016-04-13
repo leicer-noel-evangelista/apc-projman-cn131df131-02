@@ -4,6 +4,7 @@
 	include("header.php");
 	
 	$id = $_GET['delivery_supply_id'];
+	$itemList = BPHIMS::getAllItems(BPHIMS_CATEGORY_SUPPLY);
 	$supplierList = BPHIMS::getAllSuppliers();
 	$unitQuantity = BPHIMS::getAllUnits(BPHIMS_UNIT_QUANTITY);
 	$unitDosage = BPHIMS::getAllUnits(BPHIMS_UNIT_DOSAGE);

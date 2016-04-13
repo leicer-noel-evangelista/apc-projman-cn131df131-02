@@ -1,0 +1,38 @@
+.additional-option{
+	display:none;
+}
+
+#dashboard_table td{
+	vertical-align:middle;
+}
+
+#dashboard_table th{
+	text-align:center;
+}
+
+#dashboard_table td.td3{
+	text-align:center;
+}
+
+#dashboard_table td.td4{
+	text-align:center;
+}
+
+#dashboard_table td.td9{
+	text-align:center;
+}
+
+#dashboard_table td.no_stocks{
+	text-align:center;
+	font-weight:bold;
+	text-transform:uppercase;
+}
+
+.tabs-body{
+	border:1px solid #ddd;
+	margin-top:-1px;
+	padding:10px;
+}
+
+#supply_chart{
+}

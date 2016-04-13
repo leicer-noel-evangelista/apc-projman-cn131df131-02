@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.1
+-- version 4.0.9
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 06, 2016 at 06:21 PM
--- Server version: 10.1.10-MariaDB
--- PHP Version: 5.5.30
+-- Generation Time: Apr 13, 2016 at 04:18 AM
+-- Server version: 5.6.14
+-- PHP Version: 5.5.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `bphims`
@@ -26,11 +26,12 @@ SET time_zone = "+00:00";
 -- Table structure for table `category`
 --
 
-CREATE TABLE `category` (
-  `category_id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `category` (
+  `category_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `description` text NOT NULL,
+  PRIMARY KEY (`category_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `category`
@@ -46,8 +47,8 @@ INSERT INTO `category` (`category_id`, `name`, `description`) VALUES
 -- Table structure for table `delivery`
 --
 
-CREATE TABLE `delivery` (
-  `delivery_id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `delivery` (
+  `delivery_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `supplier_id` int(11) NOT NULL,
   `received_by` int(11) NOT NULL,
   `po_number` varchar(255) NOT NULL,
@@ -61,19 +62,17 @@ CREATE TABLE `delivery` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `image` varchar(255) NOT NULL,
-  `is_deleted` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`delivery_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `delivery`
 --
 
 INSERT INTO `delivery` (`delivery_id`, `supplier_id`, `received_by`, `po_number`, `pr_number`, `dr_number`, `si_number`, `amount`, `is_consignment`, `remarks`, `received_date`, `created`, `updated`, `image`, `is_deleted`) VALUES
-(1, 1, 12, 'PO867445326-01', 'PR990240582-03', 'DR89583577891', 'SI94577811123', 15600, 0, 'fff', '2016-03-14 16:00:00', '2016-03-15 08:29:04', '2016-03-20 02:53:41', '', 0),
-(2, 3, 11, 'PO833445326-01', 'PR778240582-06', 'DR89566233389', 'SI94778578123', 17340.22, 0, '', '2016-03-19 08:05:24', '2016-03-19 08:05:24', '2016-03-19 08:05:24', '', 0),
-(3, 3, 11, 'PO833445326-01', 'PR778240582-06', 'DR89566233389', 'SI94778578123', 17340.22, 0, '', '2016-03-20 06:03:49', '2016-03-19 08:13:22', '2016-03-20 06:03:49', '', 1),
-(4, 3, 11, 'PO833445326-01', 'PR778240582-06', 'DR89566233389', 'SI94778578123', 33332.72, 0, '', '2016-03-20 06:03:51', '2016-03-19 08:13:22', '2016-03-20 06:03:51', '', 1),
-(5, 3, 11, 'PO833445326-01', 'PR778240582-06', 'DR89566233389', 'SI94778578123', 17340.22, 0, '', '2016-03-20 06:04:26', '2016-03-19 08:13:22', '2016-03-20 06:04:26', '', 1);
+(7, 3, 12, 'PO-0000-0001', 'PR-0000-0001', 'DR-0000-0001', 'SI-0000-0001', 20000, 0, '', '2016-04-01 08:00:00', '2016-04-11 02:58:32', '2016-04-11 05:12:09', '', 0),
+(8, 1, 11, 'PO-0000-0002', 'PR-0000-0002', 'DR-0000-0002', 'SI-0000-0002', 30000, 0, '', '2016-04-02 08:00:00', '2016-04-11 07:31:05', '2016-04-11 07:31:05', '', 0);
 
 -- --------------------------------------------------------
 
@@ -81,8 +80,8 @@ INSERT INTO `delivery` (`delivery_id`, `supplier_id`, `received_by`, `po_number`
 -- Table structure for table `delivery_equipment`
 --
 
-CREATE TABLE `delivery_equipment` (
-  `delivery_equipment_id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `delivery_equipment` (
+  `delivery_equipment_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `delivery_id` int(11) NOT NULL,
   `item_id` int(11) NOT NULL,
   `equipment_code` varchar(255) NOT NULL,
@@ -91,17 +90,19 @@ CREATE TABLE `delivery_equipment` (
   `location` varchar(255) NOT NULL,
   `is_given` tinyint(1) NOT NULL DEFAULT '0',
   `is_returned` tinyint(1) NOT NULL DEFAULT '0',
-  `is_deleted` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`delivery_equipment_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
 
 --
 -- Dumping data for table `delivery_equipment`
 --
 
 INSERT INTO `delivery_equipment` (`delivery_equipment_id`, `delivery_id`, `item_id`, `equipment_code`, `brand`, `warranty`, `location`, `is_given`, `is_returned`, `is_deleted`) VALUES
-(1, 2, 21, 'E', 'asd', '2016-03-23 16:00:00', 'sdsd', 1, 0, 0),
-(2, 2, 21, 'EC9', 'Tokyo', '2016-04-29 16:00:00', 'FFFSD', 0, 0, 1),
-(3, 2, 24, 'XXXe', 'YYYe', '2016-03-25 16:00:00', 'EEEEe', 1, 0, 0);
+(9, 7, 35, 'EC00001', 'Nike', '2017-04-01 08:00:00', 'Basement Storage', 0, 0, 0),
+(10, 7, 35, 'EC00002', 'Bed Inc.', '2017-08-01 08:00:00', 'Storage A', 0, 0, 0),
+(11, 7, 35, 'EC00003', 'Nike', '2017-04-01 08:00:00', 'Storage A', 1, 0, 0),
+(12, 7, 35, 'EC00004', 'Adidas', '2017-04-01 08:00:00', 'Storage A', 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -109,8 +110,8 @@ INSERT INTO `delivery_equipment` (`delivery_equipment_id`, `delivery_id`, `item_
 -- Table structure for table `delivery_supply`
 --
 
-CREATE TABLE `delivery_supply` (
-  `delivery_supply_id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `delivery_supply` (
+  `delivery_supply_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `delivery_id` int(11) NOT NULL,
   `item_id` int(11) NOT NULL,
   `batch_code` varchar(255) NOT NULL,
@@ -124,32 +125,20 @@ CREATE TABLE `delivery_supply` (
   `is_restricted` tinyint(1) NOT NULL DEFAULT '0',
   `expiry` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `location` varchar(255) NOT NULL,
-  `is_deleted` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`delivery_supply_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=28 ;
 
 --
 -- Dumping data for table `delivery_supply`
 --
 
 INSERT INTO `delivery_supply` (`delivery_supply_id`, `delivery_id`, `item_id`, `batch_code`, `dispense`, `quantity`, `unit_id`, `dosage`, `dosage_unit_id`, `age`, `brand`, `is_restricted`, `expiry`, `location`, `is_deleted`) VALUES
-(1, 1, 1, 'BC000001', 100, 100, 20, 500, 14, '4+', 'Mercury', 0, '2016-06-22 16:00:00', 'Storage A', 0),
-(2, 1, 2, 'BC000001', 0, 199, 20, 200, 14, '8+', 'Mercury', 0, '2016-06-22 16:00:00', 'Storage A', 0),
-(3, 1, 2, 'BC000001', 0, 200, 20, 310, 2, '4+', 'ADC', 0, '2016-06-22 16:00:00', 'S-A', 0),
-(4, 1, 16, '77', 0, 66, 20, 400, 19, '7+', 'Johnson', 1, '2016-06-22 16:00:00', 'SB0', 0),
-(5, 1, 12, '97776', 0, 800, 20, 7, 15, '6', '5', 0, '2016-06-22 16:00:00', '4', 1),
-(6, 1, 15, '11', 0, 22, 4, 33, 3, '44', '55', 0, '2016-06-22 16:00:00', '66', 1),
-(7, 1, 4, 'BC000001', 0, 55, 16, 100, 15, '7+', 'GGH', 0, '2016-06-22 16:00:00', 'SSB', 0),
-(8, 1, 19, '110', 0, 720, 8, 320, 7, '11+', '550', 0, '2016-06-22 16:00:00', '34', 0),
-(9, 1, 19, '110', 0, 220, 8, 330, 7, '6+', '550', 0, '2016-06-22 16:00:00', '660', 0),
-(10, 1, 19, '110', 0, 220, 8, 330, 7, '3+', '550', 0, '2016-06-22 16:00:00', '660', 1),
-(11, 1, 19, '110', 0, 220, 8, 330, 7, '10+', '550', 1, '2016-06-22 16:00:00', '660', 1),
-(12, 1, 12, '9', 0, 800, 8, 7, 15, '6', '5', 0, '2016-06-22 16:00:00', '4', 1),
-(13, 1, 2, '1', 800, 800, 1, 3, 2, '4', '5', 0, '2016-06-22 16:00:00', '7', 1),
-(14, 1, 2, '1', 0, 2000, 1, 3, 2, '4', '5', 0, '2016-06-22 16:00:00', '7', 1),
-(15, 1, 2, '1', 0, 80, 1, 3, 2, '4', '5', 0, '2016-06-22 16:00:00', '7', 1),
-(16, 2, 1, 'BC000002', 155, 155, 21, 57, 13, '13+', 'GGD', 0, '2016-06-22 16:00:00', 'FF', 0),
-(17, 2, 2, 'BC000002', 550, 550, 22, 55, 7, '3+', 'Akola', 0, '2016-06-22 16:00:00', 'DF', 0),
-(18, 2, 3, 'BC000002', 0, 57, 21, 88, 14, '>3', 'KKL', 0, '2016-06-22 16:00:00', 'GG', 0);
+(23, 7, 31, 'AFRC-1-1-2017-200', 5, 100, 21, 200, 13, 'Adult', 'Alaxan', 0, '2017-01-01 08:00:00', 'Storage A', 0),
+(24, 7, 31, 'AFRC-1-1-2017-325', 5, 100, 21, 325, 13, 'Adult', 'Alaxan', 0, '2017-01-01 08:00:00', 'Storage B', 0),
+(25, 8, 37, 'TFSOF-6-6-2018', 0, 500, 20, 5, 14, 'Kids 6-12', 'Tempra', 0, '2018-06-06 08:00:00', 'Stockroom 1', 0),
+(26, 8, 38, 'TFSSF-6-6-2018', 0, 1000, 20, 5, 14, 'Kids 3+', 'Tempra', 0, '2018-06-06 08:00:00', 'Storage E', 0),
+(27, 8, 40, 'TFT-12-26-2017', 1, 30, 21, 500, 13, 'Adult', 'Tempra', 1, '2017-12-26 08:00:00', 'Storage B', 0);
 
 -- --------------------------------------------------------
 
@@ -157,11 +146,12 @@ INSERT INTO `delivery_supply` (`delivery_supply_id`, `delivery_id`, `item_id`, `
 -- Table structure for table `department`
 --
 
-CREATE TABLE `department` (
-  `department_id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `department` (
+  `department_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `description` text NOT NULL,
+  PRIMARY KEY (`department_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
 
 --
 -- Dumping data for table `department`
@@ -170,7 +160,17 @@ CREATE TABLE `department` (
 INSERT INTO `department` (`department_id`, `name`, `description`) VALUES
 (1, 'Radiology', ''),
 (2, 'Blood Test', ''),
-(3, 'Supplies & Equipment', '');
+(3, 'Supplies & Equipment', ''),
+(4, 'Breast Center', ''),
+(5, 'Cancer Center', ''),
+(6, 'Cardiovascular Center', ''),
+(7, 'Emergency Department', ''),
+(8, 'Eye Center', ''),
+(9, 'Intensive Care Unit', ''),
+(10, 'Orthopedic Center', ''),
+(11, 'Pediatrics', ''),
+(12, 'Psychiatry', ''),
+(13, 'Pulmonary Center', '');
 
 -- --------------------------------------------------------
 
@@ -178,12 +178,13 @@ INSERT INTO `department` (`department_id`, `name`, `description`) VALUES
 -- Table structure for table `employee`
 --
 
-CREATE TABLE `employee` (
-  `employee_id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `employee` (
+  `employee_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `position_id` int(11) NOT NULL,
   `first_name` varchar(255) NOT NULL,
-  `last_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `last_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`employee_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
 
 --
 -- Dumping data for table `employee`
@@ -213,11 +214,12 @@ INSERT INTO `employee` (`employee_id`, `position_id`, `first_name`, `last_name`)
 -- Table structure for table `employee_department`
 --
 
-CREATE TABLE `employee_department` (
-  `employee_department_id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `employee_department` (
+  `employee_department_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `employee_id` int(11) NOT NULL,
-  `department_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `department_id` int(11) NOT NULL,
+  PRIMARY KEY (`employee_department_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
 
 --
 -- Dumping data for table `employee_department`
@@ -243,7 +245,7 @@ INSERT INTO `employee_department` (`employee_department_id`, `employee_id`, `dep
 (17, 13, 1),
 (18, 14, 2),
 (19, 15, 2),
-(20, 16, 1);
+(20, 16, 10);
 
 -- --------------------------------------------------------
 
@@ -251,8 +253,8 @@ INSERT INTO `employee_department` (`employee_department_id`, `employee_id`, `dep
 -- Table structure for table `item`
 --
 
-CREATE TABLE `item` (
-  `item_id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `item` (
+  `item_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `category_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `code` varchar(255) NOT NULL,
@@ -260,42 +262,25 @@ CREATE TABLE `item` (
   `critical_level` int(11) NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `is_deleted` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`item_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=41 ;
 
 --
 -- Dumping data for table `item`
 --
 
 INSERT INTO `item` (`item_id`, `category_id`, `name`, `code`, `description`, `critical_level`, `created`, `updated`, `is_deleted`) VALUES
-(1, 1, 'Aboraclimyl', 'I00001', '', 20, '2016-03-15 07:43:51', '2016-03-15 08:35:13', 0),
-(2, 1, 'Acetanilide', 'I00002', '', 20, '2016-03-15 07:49:50', '2016-03-20 07:03:48', 0),
-(3, 1, 'Acetazolamide', 'I00003', '', 25, '2016-03-15 07:49:50', '2016-03-15 08:33:56', 0),
-(4, 1, 'Acetohexamide', 'I00004', '', 10, '2016-03-15 07:49:50', '2016-03-15 08:33:58', 0),
-(5, 1, 'Acetylcarbromal', 'I00005', '', 15, '2016-03-15 07:49:50', '2016-03-20 07:03:51', 0),
-(6, 1, 'Brometone', 'I00006', '', 10, '2016-03-15 07:49:50', '2016-03-15 08:34:03', 0),
-(7, 1, 'Bromisoval', 'I00007', '', 10, '2016-03-15 07:49:50', '2016-03-15 08:34:05', 0),
-(8, 1, 'Canagliflozin', 'I00008', '', 15, '2016-03-15 07:49:50', '2016-03-15 08:34:07', 0),
-(9, 1, 'Canakinumab', 'I00009', '', 10, '2016-03-15 07:49:50', '2016-03-15 08:34:10', 0),
-(10, 1, 'Carbamazepine', 'I00010', '', 10, '2016-03-15 07:49:50', '2016-03-15 08:34:13', 0),
-(11, 1, 'Cyclophosphamide', 'I00011', '', 10, '2016-03-15 07:49:50', '2016-03-15 08:34:16', 0),
-(12, 1, 'Cycloserine', 'I00012', '', 15, '2016-03-15 07:49:50', '2016-03-15 08:34:18', 0),
-(13, 1, 'Diethylcarbamazine', 'I00013', '', 20, '2016-03-15 07:49:50', '2016-03-15 08:34:21', 0),
-(14, 1, 'Dimercaprol', 'I00014', '', 20, '2016-03-15 07:49:50', '2016-03-15 08:34:24', 0),
-(15, 1, 'Dimethylfumarate', 'I00015', '', 20, '2016-03-15 07:49:50', '2016-03-15 08:34:26', 0),
-(16, 1, 'Embutramide', 'I00016', '', 20, '2016-03-15 07:49:50', '2016-03-15 08:34:29', 0),
-(17, 1, 'Emtricitabine', 'I00017', '', 20, '2016-03-15 07:49:50', '2016-03-15 08:34:31', 0),
-(18, 1, 'Evolocumab', 'I00018', '', 25, '2016-03-15 07:49:50', '2016-03-15 08:34:34', 0),
-(19, 1, 'Exemestane', 'I00019', '', 25, '2016-03-15 07:49:50', '2016-03-15 08:34:36', 0),
-(20, 1, 'Ezetimibe', 'I00020', '', 25, '2016-03-15 07:49:50', '2016-03-15 08:34:39', 0),
-(21, 2, 'Wheel Chair', 'I00021', 'ff', 2, '2016-03-15 08:35:55', '2016-03-21 10:04:22', 0),
-(22, 1, 'asdasda', '232', '3434', 232342, '2016-03-20 07:24:09', '2016-03-20 07:42:13', 1),
-(23, 2, 'Flashlight', 'I000042', 'Flashlight is a song', 5, '2016-03-20 07:24:41', '2016-03-20 07:54:04', 1),
-(24, 2, 'Scalpel', 'I00045', 'Something', 50, '2016-03-20 07:30:33', '2016-03-20 07:40:28', 0),
-(25, 2, 'sdf', 'w345345', '5353535', 345353, '2016-03-20 07:54:34', '2016-03-20 07:54:41', 1),
-(26, 2, 'yhyyhy', '8777', '5568', 8, '2016-03-20 07:55:05', '2016-03-20 07:55:10', 1),
-(27, 1, 'fhhghghg', '56', '3434', 32234, '2016-03-20 07:55:29', '2016-03-20 07:55:33', 1),
-(28, 2, 'FFd', 'FF', '333', 22, '2016-03-21 10:04:39', '2016-03-21 10:04:50', 0);
+(31, 1, 'Alaxan FR Capsule', 'S00001', '', 100, '2016-04-11 03:22:45', '2016-04-11 06:47:43', 0),
+(32, 1, 'Alaxan Tablet', 'S00002', '', 100, '2016-04-11 03:23:25', '2016-04-11 06:47:53', 0),
+(33, 1, 'Biogesic Tablet', 'S00003', '', 200, '2016-04-11 03:24:47', '2016-04-11 06:48:01', 0),
+(34, 1, 'Biogesic Tablet 8B', 'S00004', '', 50, '2016-04-11 03:25:52', '2016-04-11 06:48:10', 0),
+(35, 2, 'Wheel Chair', 'E00001', '', 30, '2016-04-11 06:48:35', '2016-04-11 06:50:05', 0),
+(36, 2, 'Bed', 'E00002', '', 10, '2016-04-11 06:48:54', '2016-04-11 16:55:35', 0),
+(37, 1, 'Tempra Forte Syrup Orange Flavor 120ml', 'S00005', '', 30, '2016-04-11 07:28:09', '2016-04-11 17:06:57', 0),
+(38, 1, 'Tempra Forte Syrup Strawberry Flavor 60ml', 'S00006', '', 30, '2016-04-11 07:29:31', '2016-04-11 17:07:05', 0),
+(39, 1, 'Tempra Forte Syrup Strawberry Flavor', 'S00006', '', 3, '2016-04-11 07:30:01', '2016-04-11 07:30:09', 1),
+(40, 1, 'Tempra Forte Tablet', 'S00007', '', 50, '2016-04-11 16:26:07', '2016-04-11 16:26:07', 0);
 
 -- --------------------------------------------------------
 
@@ -303,11 +288,12 @@ INSERT INTO `item` (`item_id`, `category_id`, `name`, `code`, `description`, `cr
 -- Table structure for table `patient`
 --
 
-CREATE TABLE `patient` (
-  `patient_id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `patient` (
+  `patient_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `first_name` varchar(255) NOT NULL,
-  `last_name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `last_name` varchar(255) NOT NULL,
+  PRIMARY KEY (`patient_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `patient`
@@ -327,11 +313,12 @@ INSERT INTO `patient` (`patient_id`, `first_name`, `last_name`) VALUES
 -- Table structure for table `position`
 --
 
-CREATE TABLE `position` (
-  `position_id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `position` (
+  `position_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
-  `description` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `description` text NOT NULL,
+  PRIMARY KEY (`position_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `position`
@@ -349,14 +336,15 @@ INSERT INTO `position` (`position_id`, `title`, `description`) VALUES
 -- Table structure for table `returned_equipment`
 --
 
-CREATE TABLE `returned_equipment` (
-  `returned_equipment_id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `returned_equipment` (
+  `returned_equipment_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `delivery_equipment_id` int(11) NOT NULL,
   `returned_by` int(11) NOT NULL,
   `department_id` int(11) NOT NULL,
   `reason` text NOT NULL,
-  `returned_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `returned_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`returned_equipment_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -364,11 +352,12 @@ CREATE TABLE `returned_equipment` (
 -- Table structure for table `supplier`
 --
 
-CREATE TABLE `supplier` (
-  `supplier_id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `supplier` (
+  `supplier_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `address` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `address` text NOT NULL,
+  PRIMARY KEY (`supplier_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `supplier`
@@ -385,8 +374,8 @@ INSERT INTO `supplier` (`supplier_id`, `name`, `address`) VALUES
 -- Table structure for table `transaction`
 --
 
-CREATE TABLE `transaction` (
-  `transaction_id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `transaction` (
+  `transaction_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `type` int(11) NOT NULL,
   `requested_by` int(11) NOT NULL,
   `department_id` int(11) NOT NULL,
@@ -395,30 +384,19 @@ CREATE TABLE `transaction` (
   `patient_id` int(11) NOT NULL,
   `requested_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `remarks` text NOT NULL,
-  `image` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `image` varchar(255) NOT NULL,
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`transaction_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=37 ;
 
 --
 -- Dumping data for table `transaction`
 --
 
-INSERT INTO `transaction` (`transaction_id`, `type`, `requested_by`, `department_id`, `department_head_id`, `doctor_id`, `patient_id`, `requested_date`, `remarks`, `image`) VALUES
-(1, 1, 2, 1, 1, 0, 0, '2016-03-22 06:54:02', '', ''),
-(2, 1, 1, 1, 13, 0, 0, '2016-04-06 08:29:40', 'asad', ''),
-(3, 1, 1, 1, 16, 0, 0, '2016-04-06 09:03:31', 'Hey', ''),
-(4, 1, 3, 1, 6, 0, 0, '2016-04-06 09:06:03', 'fff', ''),
-(5, 1, 6, 1, 13, 0, 0, '2016-04-06 09:07:16', 'aa', ''),
-(6, 1, 5, 1, 16, 0, 0, '2016-04-06 09:09:45', 'ddd', ''),
-(7, 1, 4, 1, 13, 0, 0, '2016-04-06 09:11:21', 'ddd', ''),
-(8, 1, 1, 1, 6, 0, 0, '2016-04-06 09:11:48', 'ggg', ''),
-(9, 1, 5, 2, 14, 0, 0, '2016-04-06 09:16:16', 'a', ''),
-(10, 1, 1, 1, 13, 0, 0, '2016-04-06 09:57:00', '', ''),
-(11, 2, 3, 0, 0, 8, 1, '2016-04-06 10:39:41', 'dsd', ''),
-(12, 2, 5, 0, 0, 9, 1, '2016-04-06 10:41:10', 'ddddsd', ''),
-(13, 1, 8, 1, 6, 0, 0, '2016-04-06 10:43:14', 'sf', ''),
-(14, 1, 3, 2, 7, 0, 0, '2016-04-06 10:44:17', 'asd', ''),
-(15, 1, 4, 1, 6, 0, 0, '2016-04-06 16:06:44', 'a', ''),
-(16, 1, 1, 1, 6, 0, 0, '2016-04-06 16:16:51', '', '');
+INSERT INTO `transaction` (`transaction_id`, `type`, `requested_by`, `department_id`, `department_head_id`, `doctor_id`, `patient_id`, `requested_date`, `remarks`, `image`, `is_deleted`) VALUES
+(31, 1, 1, 10, 16, 0, 0, '2016-04-11 06:55:24', '', '', 0),
+(33, 1, 6, 1, 6, 0, 0, '2016-04-11 07:09:15', '', '', 0),
+(36, 2, 3, 0, 0, 9, 1, '2016-04-11 16:50:52', '', '', 0);
 
 -- --------------------------------------------------------
 
@@ -426,44 +404,24 @@ INSERT INTO `transaction` (`transaction_id`, `type`, `requested_by`, `department
 -- Table structure for table `transaction_item`
 --
 
-CREATE TABLE `transaction_item` (
-  `transaction_item_id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `transaction_item` (
+  `transaction_item_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `transaction_id` int(11) NOT NULL,
   `delivery_item_type` int(11) NOT NULL,
   `delivery_item_id` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `quantity` int(11) NOT NULL,
+  PRIMARY KEY (`transaction_item_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=54 ;
 
 --
 -- Dumping data for table `transaction_item`
 --
 
 INSERT INTO `transaction_item` (`transaction_item_id`, `transaction_id`, `delivery_item_type`, `delivery_item_id`, `quantity`) VALUES
-(1, 1, 1, 1, 2),
-(2, 1, 1, 2, 4),
-(3, 1, 2, 1, 1),
-(4, 2, 1, 14, 10),
-(5, 2, 2, 3, 1),
-(6, 3, 1, 16, 100),
-(7, 3, 2, 1, 1),
-(8, 4, 1, 16, 10),
-(9, 4, 2, 3, 1),
-(10, 4, 2, 1, 1),
-(11, 5, 1, 16, 1),
-(12, 6, 1, 16, 2),
-(13, 7, 1, 16, 10),
-(14, 8, 1, 16, 31),
-(15, 8, 2, 3, 1),
-(16, 9, 1, 16, 1),
-(17, 9, 2, 3, 1),
-(18, 9, 2, 1, 1),
-(19, 11, 1, 1, 90),
-(20, 12, 1, 1, 2),
-(21, 13, 1, 1, 2),
-(22, 13, 1, 17, 460),
-(23, 14, 1, 17, 50),
-(24, 15, 1, 13, 800),
-(25, 16, 1, 17, 40);
+(47, 31, 1, 23, 5),
+(48, 31, 1, 24, 5),
+(49, 33, 2, 11, 1),
+(53, 36, 1, 27, 1);
 
 -- --------------------------------------------------------
 
@@ -471,13 +429,14 @@ INSERT INTO `transaction_item` (`transaction_item_id`, `transaction_id`, `delive
 -- Table structure for table `unit`
 --
 
-CREATE TABLE `unit` (
-  `unit_id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `unit` (
+  `unit_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `unit` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `type` int(11) NOT NULL DEFAULT '1',
-  `description` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `description` text NOT NULL,
+  PRIMARY KEY (`unit_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=23 ;
 
 --
 -- Dumping data for table `unit`
@@ -513,8 +472,8 @@ INSERT INTO `unit` (`unit_id`, `unit`, `name`, `type`, `description`) VALUES
 -- Table structure for table `user`
 --
 
-CREATE TABLE `user` (
-  `user_id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `user` (
+  `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_type` int(11) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
@@ -522,15 +481,17 @@ CREATE TABLE `user` (
   `last_name` varchar(255) NOT NULL,
   `last_activity` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`user_id`, `user_type`, `username`, `password`, `first_name`, `last_name`, `last_activity`, `created`, `updated`) VALUES
-(1, 1, 'admin', 'qwerty', 'BPHIMS', 'Administrator', '0000-00-00 00:00:00', '2016-03-15 06:26:54', '2016-03-15 06:26:54');
+(1, 1, 'admin', 'qwerty', 'BPHIMS', 'Administrator', '0000-00-00 00:00:00', '2016-03-15 06:26:54', '2016-03-15 06:26:54'),
+(2, 1, 'user1', 'qwerty', 'Lacer', 'Evangelista', '0000-00-00 00:00:00', '2016-04-10 05:31:51', '2016-04-10 05:31:51');
 
 -- --------------------------------------------------------
 
@@ -538,11 +499,12 @@ INSERT INTO `user` (`user_id`, `user_type`, `username`, `password`, `first_name`
 -- Table structure for table `user_type`
 --
 
-CREATE TABLE `user_type` (
-  `user_type_id` int(10) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `user_type` (
+  `user_type_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `description` text NOT NULL,
+  PRIMARY KEY (`user_type_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `user_type`
@@ -551,201 +513,6 @@ CREATE TABLE `user_type` (
 INSERT INTO `user_type` (`user_type_id`, `name`, `description`) VALUES
 (1, 'admin', '');
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `category`
---
-ALTER TABLE `category`
-  ADD PRIMARY KEY (`category_id`);
-
---
--- Indexes for table `delivery`
---
-ALTER TABLE `delivery`
-  ADD PRIMARY KEY (`delivery_id`);
-
---
--- Indexes for table `delivery_equipment`
---
-ALTER TABLE `delivery_equipment`
-  ADD PRIMARY KEY (`delivery_equipment_id`);
-
---
--- Indexes for table `delivery_supply`
---
-ALTER TABLE `delivery_supply`
-  ADD PRIMARY KEY (`delivery_supply_id`);
-
---
--- Indexes for table `department`
---
-ALTER TABLE `department`
-  ADD PRIMARY KEY (`department_id`);
-
---
--- Indexes for table `employee`
---
-ALTER TABLE `employee`
-  ADD PRIMARY KEY (`employee_id`);
-
---
--- Indexes for table `employee_department`
---
-ALTER TABLE `employee_department`
-  ADD PRIMARY KEY (`employee_department_id`);
-
---
--- Indexes for table `item`
---
-ALTER TABLE `item`
-  ADD PRIMARY KEY (`item_id`);
-
---
--- Indexes for table `patient`
---
-ALTER TABLE `patient`
-  ADD PRIMARY KEY (`patient_id`);
-
---
--- Indexes for table `position`
---
-ALTER TABLE `position`
-  ADD PRIMARY KEY (`position_id`);
-
---
--- Indexes for table `returned_equipment`
---
-ALTER TABLE `returned_equipment`
-  ADD PRIMARY KEY (`returned_equipment_id`);
-
---
--- Indexes for table `supplier`
---
-ALTER TABLE `supplier`
-  ADD PRIMARY KEY (`supplier_id`);
-
---
--- Indexes for table `transaction`
---
-ALTER TABLE `transaction`
-  ADD PRIMARY KEY (`transaction_id`);
-
---
--- Indexes for table `transaction_item`
---
-ALTER TABLE `transaction_item`
-  ADD PRIMARY KEY (`transaction_item_id`);
-
---
--- Indexes for table `unit`
---
-ALTER TABLE `unit`
-  ADD PRIMARY KEY (`unit_id`);
-
---
--- Indexes for table `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`user_id`);
-
---
--- Indexes for table `user_type`
---
-ALTER TABLE `user_type`
-  ADD PRIMARY KEY (`user_type_id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `category`
---
-ALTER TABLE `category`
-  MODIFY `category_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `delivery`
---
-ALTER TABLE `delivery`
-  MODIFY `delivery_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
---
--- AUTO_INCREMENT for table `delivery_equipment`
---
-ALTER TABLE `delivery_equipment`
-  MODIFY `delivery_equipment_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
---
--- AUTO_INCREMENT for table `delivery_supply`
---
-ALTER TABLE `delivery_supply`
-  MODIFY `delivery_supply_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
---
--- AUTO_INCREMENT for table `department`
---
-ALTER TABLE `department`
-  MODIFY `department_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
---
--- AUTO_INCREMENT for table `employee`
---
-ALTER TABLE `employee`
-  MODIFY `employee_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
---
--- AUTO_INCREMENT for table `employee_department`
---
-ALTER TABLE `employee_department`
-  MODIFY `employee_department_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
---
--- AUTO_INCREMENT for table `item`
---
-ALTER TABLE `item`
-  MODIFY `item_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
---
--- AUTO_INCREMENT for table `patient`
---
-ALTER TABLE `patient`
-  MODIFY `patient_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
---
--- AUTO_INCREMENT for table `position`
---
-ALTER TABLE `position`
-  MODIFY `position_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
---
--- AUTO_INCREMENT for table `returned_equipment`
---
-ALTER TABLE `returned_equipment`
-  MODIFY `returned_equipment_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `supplier`
---
-ALTER TABLE `supplier`
-  MODIFY `supplier_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
---
--- AUTO_INCREMENT for table `transaction`
---
-ALTER TABLE `transaction`
-  MODIFY `transaction_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
---
--- AUTO_INCREMENT for table `transaction_item`
---
-ALTER TABLE `transaction_item`
-  MODIFY `transaction_item_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
---
--- AUTO_INCREMENT for table `unit`
---
-ALTER TABLE `unit`
-  MODIFY `unit_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
---
--- AUTO_INCREMENT for table `user`
---
-ALTER TABLE `user`
-  MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `user_type`
---
-ALTER TABLE `user_type`
-  MODIFY `user_type_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

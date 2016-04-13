@@ -60,8 +60,9 @@ class Helper {
 	
 	public static function checkActivity() {
 		if($_SESSION['user_id'] == 0) {
+			Helper::createMessage(SYS_ERROR, "You must log in to view this page!");
 			Helper::redirect("index.php");
-			Helper::createMessage(SYS_ERROR,"You must log in to view this page!");
+			die();
 		}
 	}
 	

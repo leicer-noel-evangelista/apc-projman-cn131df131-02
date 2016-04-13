@@ -76,6 +76,8 @@
 					<label for="amount">Amount</label>
 					<input type="text" class="form-control" id="amount" name="amount" required />
 				</div>
+
+				<!--
 				<div class="form-group">
 					<label for="is_consignment">Is Consignment</label>
 					<select  class="form-control" id="is_consignment" name="is_consignment" required>
@@ -83,6 +85,8 @@
 						<option value="1">Yes</option>
 					</select>
 				</div>
+			-->
+			
 				<div class="form-group">
 					<label for="remarks">Remarks</label>
 					<textarea class="form-control default-textarea" id="remarks" name="remarks"></textarea>

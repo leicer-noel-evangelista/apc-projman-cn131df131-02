@@ -220,6 +220,7 @@ if(isset($_REQUEST['action']) && !empty($_REQUEST['action'])) {
 							</td>
 							<td>
 								<b>'.$r['code'].' - '.$r['name'].' ('.$r['brand'].') - '.$r['dosage'].' '.$r['dosage_unit'].'</b><br/>
+								<span><i class="glyphicon glyphicon-user"></i> '.$r['age'].'</span><br/>
 								<span><i class="glyphicon glyphicon-tag"></i> '.$r['batch_code'].'</span><br/>
 								<span><i class="glyphicon glyphicon-calendar"></i> '.Helper::formatDate($r['expiry']).' ('.Helper::daysLeft($r['expiry']).')</span><br/>
 								<span><i class="glyphicon glyphicon-shopping-cart"></i> '.($r['quantity'] - $r['dispense']).' pcs</span>

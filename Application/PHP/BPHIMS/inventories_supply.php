@@ -16,7 +16,7 @@
 	
 		<div class="pull-left">
 			<h4>Supplies</h4>
-			<p>The page contains all the item supply records. There are currently <b><?php echo $totalRecords; ?></b> item supply recorded.</p>
+			<p>The page contains all the medecine records. There are currently <b><?php echo $totalRecords; ?></b> supply recorded.</p>
 		</div>
 		
 		<div class="checkbox pull-right">

@@ -1,0 +1,36 @@
+table.transaction_details td{
+	padding:5px 0;
+}
+
+table.transaction_details td.item_requests{
+	vertical-align:top;
+}
+
+table.item_requests{
+}
+
+table.item_requests th{
+	text-align:center;
+	background:#000;
+	color:#fff;
+	border:solid 1px #000;
+	padding:5px 0;
+	font-size:12px;
+}
+
+table.item_requests td{
+	border:solid 1px #000;
+	padding:3px 0;
+	font-size:12px;
+}
+
+table.item_requests .supply_counter,
+table.item_requests .supply_item_id,
+table.item_requests .supply_dosage,
+table.item_requests .supply_quantity {
+	text-align:center;
+}
+
+table.item_requests .supply_name {
+	padding:0 10px;
+}

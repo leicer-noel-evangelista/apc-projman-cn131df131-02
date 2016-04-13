@@ -1,13 +1,12 @@
-<?php 
+<?php
 $active = "home";
+$isOtherPage = false;
 include("header.php");
-
 ?>
-
 <div class="container-fluid">
 	<div class="row">
 		<div class="span12">
-			<h4><b><u>BILIRAN PROVINCIAL HOSPITAL MISSION VISION</u></b></h4>
+		<h4><b><u>BILIRAN PROVINCIAL HOSPITAL MISSION VISION</u></b></h4>
 <br>
 			<h4><b><u>Vision</u></b></h4>
 <p>
@@ -28,5 +27,4 @@ The City of Biliran through a God centered leadership will emerge as the primary
 		</div>
 	</div>
 </div>
-<?php 
-include("footer.php"); ?>
+<?php include("footer.php"); ?>

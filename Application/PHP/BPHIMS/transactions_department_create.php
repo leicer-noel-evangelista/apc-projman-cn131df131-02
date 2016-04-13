@@ -64,7 +64,7 @@
 			<!-- START Adding Supplies -->
 			<hr/>
 			
-			<h4>Add Supplies <small>supplies that are requested</small></h4>
+			<h4>Add Medicines <small>medicines that are requested</small></h4>
 			
 			<div class="col-md-12 ajax_item_adder">
 				<div class="col-md-8">
@@ -90,8 +90,8 @@
 				<table class="col-md-12">
 					<thead>
 						<th class="col-md-1">#</th>
-						<th class="col-md-8">Details</th>
-						<th class="col-md-1">Quantity</th>
+						<th class="col-md-7">Details</th>
+						<th class="col-md-2">Quantity</th>
 						<th class="col-md-2"></th>
 					</thead>
 					<tbody class="table_body">
@@ -156,8 +156,8 @@
 				<table class="col-md-12">
 					<thead>
 						<th class="col-md-1">#</th>
-						<th class="col-md-8">Details</th>
-						<th class="col-md-1">Quantity</th>
+						<th class="col-md-7">Details</th>
+						<th class="col-md-2">Quantity</th>
 						<th class="col-md-2"></th>
 					</thead>
 					<tbody class="table_body">
@@ -194,6 +194,7 @@
 			<div class="clearfix"></div>
 			<hr/>
 			
+	
 			<div class="col-md-12 final_confirmation hidden">
 				<b>Once completed, this transaction cannot be edited and can only be deleted. Are you sure you want to complete the transaction?</b>
 				<hr/>

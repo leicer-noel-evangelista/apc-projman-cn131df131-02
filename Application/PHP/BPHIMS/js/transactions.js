@@ -228,7 +228,11 @@ $(document).ready(function(){
 		
 		for(var i=1; i <= totalQuantity; i++) {
 			var selected = (i == totalQuantity)?'selected="selected"':'';
-			element.parent().parent().parent().find('.select_item_quantity').append('<option value="'+i+'" '+selected+'>'+i+' pcs.</option>');
+			var textDisplay = i;
+			if(data.unit != null) {
+				textDisplay = i+' '+data.unit;
+			}
+			element.parent().parent().parent().find('.select_item_quantity').append('<option value="'+i+'" '+selected+'>'+textDisplay+'</option>');
 		}
 		element.parent().parent().parent().find('.select_item_quantity').removeAttr('disabled');
 		element.parent().parent().parent().find('.button_item_add').removeAttr('disabled').removeClass('btn-default').addClass('btn-success');
@@ -258,7 +262,7 @@ $(document).ready(function(){
 		clone.find('span.details_batch_code').append(' '+data.batch_code); // add batch_code
 		clone.find('span.details_expiry').append(' '+data.expiry); // add expiry
 		clone.find('span.details_location').append(' '+data.location); // add location
-		clone.find('td.quantity').append('x'+selectedQuantity); // get quantity and add it
+		clone.find('td.quantity').append('x'+selectedQuantity+' '+data.unit); // get quantity and add it
 		
 		clone.find('input.input_delivery_item_id').attr('name', 'delivery_supply_id['+numberOfSelected+']').val(data.delivery_supply_id).addClass('selected_delivery_item_id');
 		clone.find('input.input_quantity').attr('name', 'delivery_supply_quantity['+numberOfSelected+']').val(selectedQuantity);

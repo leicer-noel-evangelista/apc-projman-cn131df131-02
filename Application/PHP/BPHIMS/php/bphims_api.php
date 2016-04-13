@@ -7,6 +7,56 @@ class BPHIMS {
 	
 	############################################################
 	#                                                          #
+	#	User                                                   #
+	#                                                          #
+	############################################################
+	
+	/**
+		This methods handle the authentication process of the users
+	*/
+	public static function authenticate($data) {
+		// Open DB
+		$db = Helper::openDB();
+		$authenticated = false;
+		
+		// Create Query
+		$username = mysql_real_escape_string($data['username']);
+		$password = mysql_real_escape_string($data['password']);
+		
+		$sql = "
+			SELECT
+				u.*
+			FROM
+				`user` u
+			WHERE
+				u.username='".$username."' AND
+				u.password='".$password."'
+			";
+
+		// Query Database
+		$query = mysql_query($sql,$db);
+		// Fetch Details
+		$result = Helper::getRowFromResultQuery($query);
+		if($result) {		
+			Helper::createMessage(SYS_SUCCESS,"Welcome <b>".$result['first_name'].' '.$result['last_name'].'</b>!');
+			Helper::setSession('user_id', $result['user_id']);
+			Helper::setSession('type', $result['type']);
+			Helper::setSession('first_name', $result['first_name']);
+			Helper::setSession('last_name', $result['last_name']);
+			$authenticated = true;
+		} else {
+			Helper::createMessage(SYS_ERROR, "Authentication failed! Invalid Username/Password.");
+		}
+		
+		// Close DB
+		Helper::closeDB($db);
+		
+		// Return status 
+		return $authenticated;
+	}
+	
+	############################################################
+	#                                                          #
 	#	Delivery                                               #
 	#                                                          #
 	############################################################
@@ -239,6 +289,9 @@ class BPHIMS {
 			WHERE
 				de.delivery_id=".$id." AND
 				de.is_deleted=0
+
+				ORDER BY
+				de.equipment_code DESC
 			";
 			
 		//print_r($sql);die();
@@ -438,9 +491,9 @@ class BPHIMS {
 		// Query Database
 		$update = mysql_query($sql,$db);
 		if($update) {
-			Helper::createMessage(SYS_SUCCESS,"Successfully updated a delivery equipment record!");
+			Helper::createMessage(SYS_SUCCESS,"Successfully updated a delivery supply record!");
 		} else {
-			Helper::createMessage(SYS_ERROR,"Failed to update delivery equipment record!");
+			Helper::createMessage(SYS_ERROR,"Failed to update delivery supply record!");
 		}
 
 		// Close DB
@@ -679,6 +732,78 @@ class BPHIMS {
 		return $result;	
 	}
 	
+	/**
+		Returns the delivery supply of the specified item
+	*/
+	public static function getAllDeliverySupplyOfItem($id) {
+		// Open DB
+		$db = Helper::openDB();
+		
+		// Create Query
+		$sql = "
+			SELECT
+				ds.*,
+				u.unit,
+				ud.unit AS dosage_unit
+			FROM
+				`delivery_supply` ds
+			LEFT JOIN `unit` u ON u.unit_id = ds.unit_id
+			LEFT JOIN `unit` ud ON ud.unit_id = ds.dosage_unit_id
+			WHERE
+				ds.is_deleted=0 AND
+				ds.dispense < ds.quantity AND
+				ds.item_id = ".$id."
+			ORDER BY
+				ds.expiry
+			";
+
+		// Query Database
+		$query = mysql_query($sql,$db);
+		
+		// Fetch Details
+		$result = Helper::getListFromResultQuery($query);
+		
+		// Close DB
+		Helper::closeDB($db);
+		
+		// Return status 
+		return $result;
+	}
+	
+	/**
+		Returns the delivery equipment of the specified item
+	*/
+	public static function getAllDeliveryEquipmentOfItem($id) {
+		// Open DB
+		$db = Helper::openDB();
+		
+		// Create Query
+		$sql = "
+			SELECT
+				de.*
+			FROM
+				`delivery_equipment` de
+			WHERE
+				de.is_deleted=0 AND
+				de.is_given=0 AND
+				de.item_id = ".$id."
+			ORDER BY
+				de.delivery_equipment_id
+			";
+
+		// Query Database
+		$query = mysql_query($sql,$db);
+		
+		// Fetch Details
+		$result = Helper::getListFromResultQuery($query);
+		
+		// Close DB
+		Helper::closeDB($db);
+		
+		// Return status 
+		return $result;
+	}
+	
 	############################################################
 	#                                                          #
 	#	Supplier                                               #
@@ -755,9 +880,9 @@ class BPHIMS {
 	}
 	
 	/**
-		This method returns all records in item table
+		This method returns the remaning total of supply
 	*/
-	public static function getRemaining($id) {
+	public static function getRemainingSupply($id) {
 		// Open DB
 		$db = Helper::openDB();
 		
@@ -770,6 +895,38 @@ class BPHIMS {
 			WHERE
 				ds.is_deleted=0 AND
 				ds.item_id=".$id."
+			";
+		//print_r($sql);die();
+		// Query Database
+		$query = mysql_query($sql,$db);
+		
+		// Fetch Details
+		$result = Helper::getRowFromResultQuery($query);
+		
+		// Close DB
+		Helper::closeDB($db);
+		
+		// Return status 
+		return ($result['total'])?$result['total']:0;
+	}
+	
+	/**
+		This method returns the remaning total of supply
+	*/
+	public static function getRemainingEquipment($id) {
+		// Open DB
+		$db = Helper::openDB();
+		
+		// Create Query
+		$sql = "
+			SELECT
+				COUNT(*) as total
+			FROM
+				`delivery_equipment` de
+			WHERE
+				de.is_deleted=0 AND
+				de.is_given=0 AND
+				de.item_id=".$id."
 			";
 		//print_r($sql);die();
 		// Query Database
@@ -804,7 +961,7 @@ class BPHIMS {
 				i.category_id=".$id." AND
 				i.is_deleted=0
 			ORDER BY
-				i.item_id ASC
+				i.item_id DESC
 			".$additional."
 			";
 			
@@ -893,10 +1050,10 @@ class BPHIMS {
 		$insert = mysql_query($sql,$db);
 		$id = 0;
 		if($insert) {
-			Helper::createMessage(SYS_SUCCESS,"Successfully added a item supply record!");
+			Helper::createMessage(SYS_SUCCESS,"Successfully added a item record!");
 			$id = mysql_insert_id();
 		} else {
-			Helper::createMessage(SYS_ERROR,"Failed to add item supply record!");
+			Helper::createMessage(SYS_ERROR,"Failed to add item record!");
 		}
 		// Close DB
 		Helper::closeDB($db);
@@ -936,9 +1093,9 @@ class BPHIMS {
 		// Query Database
 		$update = mysql_query($sql,$db);
 		if($update) {
-			Helper::createMessage(SYS_SUCCESS,"Successfully updated item supply record!");
+			Helper::createMessage(SYS_SUCCESS,"Successfully updated item record!");
 		} else {
-			Helper::createMessage(SYS_ERROR,"Failed to update item supply record!");
+			Helper::createMessage(SYS_ERROR,"Failed to update item record!");
 		}
 
 		// Close DB
@@ -970,9 +1127,9 @@ class BPHIMS {
 		// Query Database
 		$update = mysql_query($sql,$db);
 		if($update) {
-			Helper::createMessage(SYS_SUCCESS,"Supply record #".Helper::formatID($item_id)." is successfully deleted!");
+			Helper::createMessage(SYS_SUCCESS,"Item record #".Helper::formatID($item_id)." is successfully deleted!");
 		} else {
-			Helper::createMessage(SYS_ERROR,"Failed to delete a supply record!");
+			Helper::createMessage(SYS_ERROR,"Failed to delete a item record!");
 		}
 
 		// Close DB
@@ -1010,6 +1167,74 @@ class BPHIMS {
 		
 		// Return status 
 		return $result;
+	}
+	
+	/**
+		This method returns information on delivery supply
+	*/
+	public static function getItemOnDeliverySupply($id) {
+		// Open DB
+		$db = Helper::openDB();
+		
+		// Create Query
+		$sql = "
+			SELECT
+				ds.batch_code, ds.dosage, ds.location,
+				i.item_id, i.name, i.code,
+				u.unit AS unit,
+				du.unit AS dosage_unit
+			FROM
+				`delivery_supply` ds
+			LEFT JOIN `item` i ON i.item_id=ds.item_id
+			LEFT JOIN `unit` u ON u.unit_id=ds.unit_id
+			LEFT JOIN `unit` du ON du.unit_id=ds.dosage_unit_id
+			WHERE
+				ds.delivery_supply_id=".$id."
+			";
+
+		// Query Database
+		$query = mysql_query($sql,$db);
+		
+		// Fetch Details
+		$result = Helper::getRowFromResultQuery($query);
+		
+		// Close DB
+		Helper::closeDB($db);
+		
+		// Return status 
+		return $result;	
+	}
+	
+	/**
+		This method returns information on delivery equipment
+	*/
+	public static function getItemOnDeliveryEquipment($id) {
+		// Open DB
+		$db = Helper::openDB();
+		
+		// Create Query
+		$sql = "
+			SELECT
+				de.equipment_code, de.brand, de.warranty,
+				i.item_id, i.name, i.code
+			FROM
+				`delivery_equipment` de
+			LEFT JOIN `item` i ON i.item_id=de.item_id
+			WHERE
+				de.delivery_equipment_id=".$id."
+			";
+
+		// Query Database
+		$query = mysql_query($sql,$db);
+		
+		// Fetch Details
+		$result = Helper::getRowFromResultQuery($query);
+		
+		// Close DB
+		Helper::closeDB($db);
+		
+		// Return status 
+		return $result;	
 	}
 	
 	############################################################
@@ -1468,6 +1693,118 @@ class BPHIMS {
 		
 		// Close DB
 		Helper::closeDB($db);
+	}
+	
+	/**
+	
+	*/
+	public static function getTransaction($id) {
+		// Open DB
+		$db = Helper::openDB();
+		
+		// Create Query
+		$sql = "
+			SELECT
+				t.*,
+				rb.first_name AS requested_by_first_name, rb.last_name AS requested_by_last_name,
+				d.name AS department_name,
+				dh.first_name AS department_head_first_name, dh.last_name AS department_head_last_name,
+				dr.first_name AS doctor_first_name, dr.last_name AS doctor_last_name,
+				p.first_name AS patient_first_name, p.last_name AS patient_last_name
+			FROM
+				`transaction` t
+			LEFT JOIN `employee` rb ON rb.employee_id = t.requested_by
+			LEFT JOIN `department` d ON d.department_id = t.department_id
+			LEFT JOIN `employee` dh ON dh.employee_id = t.department_head_id
+			LEFT JOIN `employee` dr ON dr.employee_id = t.doctor_id
+			LEFT JOIN `patient` p ON p.patient_id = t.patient_id
+			WHERE
+				t.is_deleted=0 AND
+				t.transaction_id=".$id."
+			";
+			
+		// Query Database
+		$query = mysql_query($sql,$db);
+		
+		// Fetch Details
+		$result = Helper::getRowFromResultQuery($query);
+		
+		// Close DB
+		Helper::closeDB($db);
+		
+		// Return status 
+		return $result;	
+	}
+	
+	/**
+		This method deletes a transaction record
+	*/
+	public static function deleteTransaction($data) {
+		// Open DB
+		$db = Helper::openDB();
+		try {
+			// Begin transaction
+			mysql_query("BEGIN");
+			
+			// Create Query
+			$transaction_id = mysql_real_escape_string($data['transaction_id']);
+			
+			$sql = '
+				SELECT
+					ti.delivery_item_type, ti.delivery_item_id
+				FROM
+					`transaction_item` ti
+				WHERE
+					ti.transaction_id='.$transaction_id.'
+			';
+			$query = mysql_query($sql,$db);
+			$transaction_items = Helper::getListFromResultQuery($query);
+			
+			// Delete transaction items
+			$sql = '
+				DELETE
+				FROM
+					`transaction_item`
+				WHERE
+					transaction_id='.$transaction_id.'
+			';
+			mysql_query($sql,$db);
+			 
+			// Delete transaction record
+			$sql = '
+				DELETE
+				FROM
+					`transaction`
+				WHERE
+					transaction_id='.$transaction_id.'
+			';
+			mysql_query($sql,$db);
+			
+			Helper::createMessage(SYS_SUCCESS,"Successfully deleted transaction record: #".Helper::formatID($transaction_id));
+			mysql_query("COMMIT");
+		} catch (Exception $e) {
+			Helper::createMessage(SYS_ERROR,"Failed to delete transaction record: #".Helper::formatID($transaction_id));
+			mysql_query("ROLLBACK");
+		}
+
+		// Close DB
+		Helper::closeDB($db);
+		
+		// Update delete items
+		foreach($transaction_items as $item) {
+			switch($item['delivery_item_type']) {
+				case BPHIMS_ITEM_SUPPLY:
+					SELF::updateDeliveryItemSupplyQuantity($item['delivery_item_id']);
+					break;
+				case BPHIMS_ITEM_EQUIPMENT:
+					SELF::updateDeliveryItemEquipmentGiven($item['delivery_item_id']);
+					break;
+				default:
+					break;
+			}
+		}
+		
+		return null;
 	}
 	
 	############################################################

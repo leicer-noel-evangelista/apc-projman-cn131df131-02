@@ -4,6 +4,18 @@ include("init.php");
 if(isset($_REQUEST['action']) && !empty($_REQUEST['action'])) {
 	
 	/**
+		Authentication
+	*/
+	if($_REQUEST['action'] === "authentication") {
+		$authenticated = BPHIMS::authenticate($_REQUEST);
+		if($authenticated) {
+			Helper::redirect("../dashboard_supply.php");
+		} else {
+			Helper::redirect("../index.php");
+		}
+	}
+	
+	/**
 		Create delivery action
 	*/
 	if($_REQUEST['action'] === "delivery_create") {
@@ -130,6 +142,14 @@ if(isset($_REQUEST['action']) && !empty($_REQUEST['action'])) {
 	*/
 	if($_REQUEST['action'] === "transactions_doctor_create") {
 		BPHIMS::createTransactionDoctor($_REQUEST);
+		Helper::redirect("../transactions.php");
+	}
+	
+	/**
+		Delete transaction action
+	*/
+	if($_REQUEST['action'] === "transaction_delete") {
+		BPHIMS::deleteTransaction($_REQUEST);
 		Helper::redirect("../transactions.php");
 	}
 	
